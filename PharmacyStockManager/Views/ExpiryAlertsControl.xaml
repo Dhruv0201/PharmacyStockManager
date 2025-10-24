@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="PharmacyStockManager.Views.ExpiryAlertsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+    <Grid Margin="10">
+        <DataGrid x:Name="dgExpiryAlerts" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding ExpiryAlertID}" Width="Auto"/>
+                <DataGridTextColumn Header="Product" Binding="{Binding Product.ProductName}" Width="*"/>
+                <DataGridTextColumn Header="Expiry Date" Binding="{Binding ExpiryDate}" Width="*"/>
+                <DataGridTextColumn Header="Days Left" Binding="{Binding DaysLeft}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

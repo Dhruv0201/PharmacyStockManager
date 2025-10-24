@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="PharmacyStockManager.Views.PurchaseReturnsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+    <Grid Margin="10">
+        <DataGrid x:Name="dgPurchaseReturns" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Return ID" Binding="{Binding PurchaseReturnHeaderID}" Width="Auto"/>
+                <DataGridTextColumn Header="Purchase ID" Binding="{Binding PurchaseID}" Width="*"/>
+                <DataGridTextColumn Header="Product" Binding="{Binding Product.ProductName}" Width="*"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*"/>
+                <DataGridTextColumn Header="Return Date" Binding="{Binding ReturnDate}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

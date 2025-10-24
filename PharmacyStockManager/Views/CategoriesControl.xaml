@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="PharmacyStockManager.Views.CategoriesControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+
+    <Grid>
+        <DataGrid x:Name="dgCategories" AutoGenerateColumns="False" CanUserAddRows="False" Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding CategoryID}" Width="Auto"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding CategoryName}" Width="*"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2*"/>
+                <DataGridTextColumn Header="Created By" Binding="{Binding CreatedBy}" Width="*"/>
+                <DataGridTextColumn Header="Modified By" Binding="{Binding ModifiedBy}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

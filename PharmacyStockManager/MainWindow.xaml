@@ -1,0 +1,50 @@
+﻿<Window x:Class="PharmacyStockManager.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Pharmacy Manager"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Background="White">
+
+    <DockPanel>
+
+        <!-- Header -->
+        <Border DockPanel.Dock="Top" Background="#4CAF50" Height="60">
+            <Grid>
+                <TextBlock Text="Goodluck Pharmacy Manager" 
+                           Foreground="White" FontSize="24" FontWeight="Bold"
+                           VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                <!-- User Profile + Logout -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
+                    <TextBlock Text="{Binding LoggedInUserName}" 
+                               Foreground="White" FontSize="12" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <Button Content="Logout"
+        Style="{StaticResource RoundedActionButton}"
+        Background="#E53935" Width="70" Height="30"
+        Click="Logout_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Side Menu -->
+        <StackPanel DockPanel.Dock="Left" Width="220" Background="#2E7D32">
+            <!--<Button Content="Dashboard" Name="btnDashboard" Style="{StaticResource SideMenuButton}" Click="BtnDashboard_Click"/>-->
+            <Button Content="Categories" Name="btnCategories" Style="{StaticResource SideMenuButton}" Click="BtnCategories_Click"/>
+            <Button Content="Products" Name="btnProducts" Style="{StaticResource SideMenuButton}" Click="BtnProducts_Click"/>
+            <Button Content="Purchases" Name="btnPurchases" Style="{StaticResource SideMenuButton}" Click="BtnPurchases_Click"/>
+            <Button Content="Purchase Returns" Name="btnPurchaseReturns" Style="{StaticResource SideMenuButton}" Click="BtnPurchaseReturns_Click"/>
+            <Button Content="Sales" Name="btnSales" Style="{StaticResource SideMenuButton}" Click="BtnSales_Click"/>
+            <Button Content="Sale Returns" Name="btnSaleReturns" Style="{StaticResource SideMenuButton}" Click="BtnSaleReturns_Click"/>
+            <Button Content="Suppliers" Name="btnSuppliers" Style="{StaticResource SideMenuButton}" Click="BtnSuppliers_Click"/>
+            <Button Content="Customers" Name="btnCustomers" Style="{StaticResource SideMenuButton}" Click="BtnCustomers_Click"/>
+            <Button Content="Stock Logs" Name="btnStockLogs" Style="{StaticResource SideMenuButton}" Click="BtnStockLogs_Click"/>
+            <Button Content="Expiry Alerts" Name="btnExpiryAlerts" Style="{StaticResource SideMenuButton}" Click="BtnExpiryAlerts_Click"/>
+        </StackPanel>
+
+
+        <!-- Content Area -->
+        <ContentControl Name="MainContent" Background="White"/>
+
+    </DockPanel>
+</Window>

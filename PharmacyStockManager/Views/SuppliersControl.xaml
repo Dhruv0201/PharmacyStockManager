@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="PharmacyStockManager.Views.SuppliersControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+    <Grid Margin="10">
+        <DataGrid x:Name="dgSuppliers" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding SupplierID}" Width="Auto"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding SupplierName}" Width="*"/>
+                <DataGridTextColumn Header="Mobile" Binding="{Binding MobileNumber}" Width="*"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="2*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

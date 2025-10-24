@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="PharmacyStockManager.Views.StockLogsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+    <Grid Margin="10">
+        <DataGrid x:Name="dgStockLogs" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Log ID" Binding="{Binding StockLogID}" Width="Auto"/>
+                <DataGridTextColumn Header="Product" Binding="{Binding Product.ProductName}" Width="*"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*"/>
+                <DataGridTextColumn Header="Action" Binding="{Binding ActionType}" Width="*"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding ActionDate}" Width="*"/>
+                <DataGridTextColumn Header="Performed By" Binding="{Binding PerformedByUser.Username}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

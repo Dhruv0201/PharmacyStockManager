@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="PharmacyStockManager.Views.PurchasesControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+    <Grid Margin="10">
+        <DataGrid x:Name="dgPurchases" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Purchase ID" Binding="{Binding PurchaseID}" Width="Auto"/>
+                <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.SupplierName}" Width="*"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding PurchaseDate}" Width="*"/>
+                <DataGridTextColumn Header="Total Amount" Binding="{Binding TotalAmount}" Width="*"/>
+                <DataGridTextColumn Header="Purchased By" Binding="{Binding PurchasedByUser.Username}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
