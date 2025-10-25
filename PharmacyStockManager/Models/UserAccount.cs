@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PharmacyStockManager.Models;
 
@@ -11,7 +12,7 @@ public partial class UserAccount
 
     public string HashedPassword { get; set; } = null!;
 
-    public string PasswordSalt { get; set; } = null!;
+    public string PasswordHash { get; set; } = null!;
 
     public string? FullName { get; set; }
 

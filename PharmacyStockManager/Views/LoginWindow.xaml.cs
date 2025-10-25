@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using PharmacyStockManager.Helpers;
 using PharmacyStockManager.Models;
 using PharmacyStockManager.Models;
@@ -33,7 +34,7 @@ namespace PharmacyStockManager.Views
 
         private void LoginViewModel_ChangeWindow()
         {
-            var mainWindow = new MainWindow(_context);
+            var mainWindow = App.ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
             this.Close();
         }
