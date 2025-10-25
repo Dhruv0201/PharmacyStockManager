@@ -35,6 +35,8 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Resources\Icons\delete_icon.png" />
+    <None Remove="Resources\Icons\edit_icon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +57,15 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Icons\delete_icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\edit_icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

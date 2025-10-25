@@ -51,8 +51,9 @@ namespace PharmacyStockManager.ViewModel
                 .Where(c => string.IsNullOrWhiteSpace(filter) || c.CategoryName.Contains(filter))
                 .OrderBy(c => c.CategoryId)
                 .AsEnumerable()
-                .Select(c => new CategoryItemViewModel
+                .Select((c, index) => new CategoryItemViewModel
                 {
+                    SerialNumber = index + 1,
                     CategoryID = c.CategoryId,
                     CategoryName = c.CategoryName,
                     Description = c.Description,
