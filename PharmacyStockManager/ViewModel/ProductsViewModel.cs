@@ -1,4 +1,5 @@
-﻿using PharmacyStockManager.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PharmacyStockManager.Models;
 using PharmacyStockManager.Views.PopupWindows;
 using System;
 using System.Collections.ObjectModel;
@@ -9,9 +10,9 @@ namespace PharmacyStockManager.ViewModel
 {
     public class ProductsViewModel : ViewModelBase
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _context = new AppDbContext();
 
-        public ObservableCollection<ProductItemViewModel> Products { get; set; } = new();
+        public ObservableCollection<Product> Products { get; set; } = new();
         public ObservableCollection<Category> Categories { get; set; } = new();
         public ObservableCollection<Supplier> Suppliers { get; set; } = new();
 
@@ -32,13 +33,11 @@ namespace PharmacyStockManager.ViewModel
         public ICommand DeleteCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        public ProductsViewModel(AppDbContext context)
+        public ProductsViewModel()
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-
             AddCommand = new RelayCommand(_ => AddProduct());
-            EditCommand = new RelayCommand(obj => EditProduct(obj as ProductItemViewModel));
-            DeleteCommand = new RelayCommand(obj => DeleteProduct(obj as ProductItemViewModel));
+            EditCommand = new RelayCommand(obj => EditProduct(obj as Product));
+            DeleteCommand = new RelayCommand(obj => DeleteProduct(obj as Product));
             RefreshCommand = new RelayCommand(_ => LoadProducts());
 
             LoadCategoriesAndSuppliers();
@@ -49,107 +48,47 @@ namespace PharmacyStockManager.ViewModel
         {
             Categories.Clear();
             Suppliers.Clear();
-
-            foreach (var cat in _context.Categories.OrderBy(c => c.CategoryName))
-                Categories.Add(cat);
-
-            foreach (var sup in _context.Suppliers.OrderBy(s => s.SupplierName))
-                Suppliers.Add(sup);
+            Categories = new ObservableCollection<Category>(_context.Categories.AsNoTracking().OrderBy(c => c.CategoryName).ToList());
+            Suppliers = new ObservableCollection<Supplier>(_context.Suppliers.AsNoTracking().OrderBy(s => s.SupplierName).ToList());
         }
 
         public void LoadProducts(string? filter = null)
         {
             Products.Clear();
-
-            var categoriesDict = _context.Categories.ToDictionary(c => c.CategoryId, c => c.CategoryName);
-            var suppliersDict = _context.Suppliers.ToDictionary(s => s.SupplierId, s => s.SupplierName);
-
-            var products = _context.Products
-                .Where(p => string.IsNullOrWhiteSpace(filter) || p.ProductName.Contains(filter))
-                .OrderBy(p => p.ProductId)
-                .AsEnumerable()
-                .Select((p, index) => new ProductItemViewModel
-                {
-                    SerialNumber = index + 1,
-                    ProductId = p.ProductId,
-                    ProductName = p.ProductName,
-                    CategoryName = p.CategoryId.HasValue && categoriesDict.TryGetValue(p.CategoryId.Value, out var cat) ? cat : "Unknown",
-                    SupplierName = p.SupplierId.HasValue && suppliersDict.TryGetValue(p.SupplierId.Value, out var sup) ? sup : "Unknown",
-                    BatchNumber = p.BatchNumber ?? "",
-                    ExpiryDate = p.ExpiryDate,
-                    PurchasePrice = p.PurchasePrice,
-                    SellingPrice = p.SellingPrice,
-                    QuantityInStock = p.QuantityInStock,
-                    ReorderLevel = p.ReorderLevel
-                })
-                .ToList();
-
-            foreach (var p in products)
-                Products.Add(p);
+            Products = new ObservableCollection<Product> (_context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Supplier)
+                .Where(p => string.IsNullOrEmpty(filter) || p.ProductName.Contains(filter))
+                .OrderBy(p => p.ProductName).ToList());
         }
 
         private void AddProduct()
         {
-            var dialog = new ProductDialog(Categories, Suppliers);
+            var dialog = new ProductDialog();
 
             if (dialog.ShowDialog() == true)
             {
-                var newProduct = new Product
-                {
-                    ProductName = dialog.ProductName,
-                    CategoryId = dialog.CategoryId,
-                    SupplierId = dialog.SupplierId,
-                    BatchNumber = dialog.BatchNumber,
-                    ExpiryDate = dialog.ExpiryDate,
-                    PurchasePrice = dialog.PurchasePrice,
-                    SellingPrice = dialog.SellingPrice,
-                    QuantityInStock = dialog.QuantityInStock,
-                    ReorderLevel = dialog.ReorderLevel,
-                    CreatedAt = DateTime.Now,
-                    ModifiedAt = DateTime.Now,
-                    ModifiedBy = App.LoggedInUser.UserId
-                };
-
-                _context.Products.Add(newProduct);
-                _context.SaveChanges();
                 LoadProducts(SearchText);
             }
         }
 
-        private void EditProduct(ProductItemViewModel? productVM)
+        private void EditProduct(Product product)
         {
-            if (productVM == null) return;
 
-            var product = _context.Products.Find(productVM.ProductId);
             if (product == null) return;
 
-            var dialog = new ProductDialog(Categories, Suppliers, product);
+            var dialog = new ProductDialog(product.ProductId);
 
             if (dialog.ShowDialog() == true)
             {
-                product.ProductName = dialog.ProductName;
-                product.CategoryId = dialog.CategoryId;
-                product.SupplierId = dialog.SupplierId;
-                product.BatchNumber = dialog.BatchNumber;
-                product.ExpiryDate = dialog.ExpiryDate;
-                product.PurchasePrice = dialog.PurchasePrice;
-                product.SellingPrice = dialog.SellingPrice;
-                product.QuantityInStock = dialog.QuantityInStock;
-                product.ReorderLevel = dialog.ReorderLevel;
-                product.ModifiedAt = DateTime.Now;
-                product.ModifiedBy = App.LoggedInUser.UserId;
-
-                _context.SaveChanges();
                 LoadProducts(SearchText);
             }
         }
 
 
-        private void DeleteProduct(ProductItemViewModel? productVM)
+        private void DeleteProduct(Product product)
         {
-            if (productVM == null) return;
-
-            var product = _context.Products.Find(productVM.ProductId);
             if (product == null) return;
 
             if (System.Windows.MessageBox.Show(

@@ -1,4 +1,5 @@
-﻿using PharmacyStockManager.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PharmacyStockManager.Models;
 using PharmacyStockManager.Views.PopupWindows;
 using System;
 using System.Collections.ObjectModel;
@@ -9,9 +10,17 @@ namespace PharmacyStockManager.ViewModel
 {
     public class CategoriesViewModel : ViewModelBase
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _context = new AppDbContext();
 
-        public ObservableCollection<CategoryItemViewModel> Categories { get; set; } = new();
+        private ObservableCollection<Category> _categories = new();
+        public ObservableCollection<Category> Categories
+        {
+            get => _categories;
+            set{
+                _categories = value;
+                OnPropertyChanged(nameof(Categories));
+            }
+        }
         private string _searchText = string.Empty;
         public string SearchText
         {
@@ -29,13 +38,12 @@ namespace PharmacyStockManager.ViewModel
         public ICommand DeleteCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        public CategoriesViewModel(AppDbContext context)
+        public CategoriesViewModel()
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
 
             AddCommand = new RelayCommand(_ => AddCategory());
-            EditCommand = new RelayCommand(obj => EditCategory(obj as CategoryItemViewModel));
-            DeleteCommand = new RelayCommand(obj => DeleteCategory(obj as CategoryItemViewModel));
+            EditCommand = new RelayCommand(obj => EditCategory(obj as Category));
+            DeleteCommand = new RelayCommand(obj => DeleteCategory(obj as Category));
             RefreshCommand = new RelayCommand(_ => LoadCategories());
 
             LoadCategories();
@@ -44,73 +52,34 @@ namespace PharmacyStockManager.ViewModel
         public void LoadCategories(string? filter = null)
         {
             Categories.Clear();
-
-            var users = _context.UserAccounts.ToDictionary(u => u.UserId, u => u.Username);
-
-            var categories = _context.Categories
-                .Where(c => string.IsNullOrWhiteSpace(filter) || c.CategoryName.Contains(filter))
-                .OrderBy(c => c.CategoryId)
-                .AsEnumerable()
-                .Select((c, index) => new CategoryItemViewModel
-                {
-                    SerialNumber = index + 1,
-                    CategoryID = c.CategoryId,
-                    CategoryName = c.CategoryName,
-                    Description = c.Description,
-                    CreatedByName = c.CreatedBy.HasValue && users.TryGetValue(c.CreatedBy.Value, out var created) ? created : "Unknown",
-                    ModifiedByName = c.ModifiedBy.HasValue && users.TryGetValue(c.ModifiedBy.Value, out var modified) ? modified : "Unknown"
-                })
-                .ToList();
-
-            foreach (var c in categories)
-                Categories.Add(c);
+            Categories = new ObservableCollection<Category>(_context.Categories.AsNoTracking()
+                .Where(c => string.IsNullOrEmpty(filter) || c.CategoryName.Contains(filter))
+                .OrderBy(c => c.CategoryName)
+                .ToList());
         }
 
         private void AddCategory()
         {
             var dialog = new CategoryDialog();
-            if (dialog.ShowDialog() == true)
+            if(dialog.ShowDialog() == true)
             {
-                var newCat = new Category
-                {
-                    CategoryName = dialog.CategoryName,
-                    Description = dialog.Description,
-                    CreatedBy = App.LoggedInUser.UserId,
-                    ModifiedBy = App.LoggedInUser.UserId,
-                    CreatedAt = DateTime.Now,
-                    ModifiedAt = DateTime.Now
-                };
-                _context.Categories.Add(newCat);
-                _context.SaveChanges();
                 LoadCategories(SearchText);
             }
         }
 
-        private void EditCategory(CategoryItemViewModel? categoryVM)
+        private void EditCategory(Category category)
         {
-            if (categoryVM == null) return;
 
-            var category = _context.Categories.Find(categoryVM.CategoryID);
             if (category == null) return;
-
-            var dialog = new CategoryDialog(category.CategoryName, category.Description);
-            if (dialog.ShowDialog() == true)
+            var dialog = new CategoryDialog(category.CategoryId);
+            if(dialog.ShowDialog() == true)
             {
-                category.CategoryName = dialog.CategoryName;
-                category.Description = dialog.Description;
-                category.ModifiedBy = App.LoggedInUser.UserId;
-                category.ModifiedAt = DateTime.Now;
-
-                _context.SaveChanges();
                 LoadCategories(SearchText);
             }
         }
 
-        private void DeleteCategory(CategoryItemViewModel? categoryVM)
+        private void DeleteCategory(Category category)
         {
-            if (categoryVM == null) return;
-
-            var category = _context.Categories.Find(categoryVM.CategoryID);
             if (category == null) return;
 
             if (System.Windows.MessageBox.Show(

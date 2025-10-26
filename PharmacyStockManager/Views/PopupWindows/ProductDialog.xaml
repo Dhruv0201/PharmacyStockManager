@@ -23,14 +23,14 @@
             <StackPanel Grid.Row="1" VerticalAlignment="Top">
                 <StackPanel Margin="0,0,0,10">
                     <TextBlock Text="Product Name:" FontWeight="SemiBold"/>
-                    <TextBox x:Name="txtProductName" Height="30"/>
+                    <TextBox x:Name="txtProductName" Height="30" Text="{Binding ProductName,UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  Style="{StaticResource ValidationTextbox}"/>
                 </StackPanel>
 
                 <StackPanel Margin="0,0,0,10">
                     <TextBlock Text="Category:" FontWeight="SemiBold"/>
-                    <ComboBox x:Name="cbCategory"
+                    <ComboBox x:Name="cbCategory" ItemsSource="{Binding Categories}" Style="{StaticResource ValidationCombobox}" SelectedItem="{Binding SelectedCategory,UpdateSourceTrigger=LostFocus,ValidatesOnDataErrors=True}"
                               DisplayMemberPath="CategoryName"
-                              SelectedValuePath="CategoryID"
+                              SelectedValuePath="CategoryI"
                               Height="30"
                               SelectedIndex="0"
                               />
@@ -38,7 +38,7 @@
 
                 <StackPanel Margin="0,0,0,10">
                     <TextBlock Text="Supplier:" FontWeight="SemiBold"/>
-                    <ComboBox x:Name="cbSupplier"
+                    <ComboBox x:Name="cbSupplier" ItemsSource="{Binding Suppliers}" Style="{StaticResource ValidationCombobox}" SelectedItem="{Binding SelectedSupplier,UpdateSourceTrigger=LostFocus,ValidatesOnDataErrors=True}"
                               DisplayMemberPath="SupplierName"
                               SelectedValuePath="SupplierID"
                               Height="30"
@@ -48,33 +48,33 @@
 
                 <StackPanel Margin="0,0,0,10">
                     <TextBlock Text="Batch Number:" FontWeight="SemiBold"/>
-                    <TextBox x:Name="txtBatchNumber" Height="30"/>
+                    <TextBox x:Name="txtBatchNumber" Height="30"  Style="{StaticResource ValidationTextbox}" Text="{Binding BatchNumber,UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}" />
                 </StackPanel>
 
                 <StackPanel Margin="0,0,0,10">
                     <TextBlock Text="Expiry Date:" FontWeight="SemiBold"/>
-                    <DatePicker x:Name="dpExpiryDate" Height="30"/>
+                    <DatePicker x:Name="dpExpiryDate" Height="30" SelectedDate="{Binding ExpiryDate}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                     <StackPanel Width="200" Margin="0,0,20,0">
                         <TextBlock Text="Purchase Price:" FontWeight="SemiBold"/>
-                        <TextBox x:Name="txtPurchasePrice" Height="30"/>
+                        <TextBox x:Name="txtPurchasePrice" DataObject.Pasting ="NumericTextBox_Pasting"  PreviewTextInput="txtPurchasePrice_PreviewTextInput" Height="30"  Style="{StaticResource ValidationTextbox}" Text="{Binding PurchasePrice,UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"/>
                     </StackPanel>
                     <StackPanel Width="200">
-                        <TextBlock Text="Selling Price:" FontWeight="SemiBold"/>
-                        <TextBox x:Name="txtSellingPrice" Height="30"/>
+                        <TextBlock Text="Selling Price:" FontWeight="SemiBold" />
+                        <TextBox x:Name="txtSellingPrice" DataObject.Pasting ="NumericTextBox_Pasting" Height="30" PreviewTextInput="txtPurchasePrice_PreviewTextInput"  Style="{StaticResource ValidationTextbox}" Text="{Binding SellingPrice,UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"/>
                     </StackPanel>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                     <StackPanel Width="200" Margin="0,0,20,0">
                         <TextBlock Text="Quantity in Stock:" FontWeight="SemiBold"/>
-                        <TextBox x:Name="txtQuantity" Height="30"/>
+                        <TextBox x:Name="txtQuantity" Height="30" DataObject.Pasting ="NumericTextBox_Pasting" PreviewTextInput="txtPurchasePrice_PreviewTextInput"  Style="{StaticResource ValidationTextbox}" Text="{Binding QuantityInStock,UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"/>
                     </StackPanel>
                     <StackPanel Width="200">
                         <TextBlock Text="Reorder Level:" FontWeight="SemiBold"/>
-                        <TextBox x:Name="txtReorderLevel" Height="30"/>
+                        <TextBox x:Name="txtReorderLevel" DataObject.Pasting ="NumericTextBox_Pasting" Height="30" PreviewTextInput="txtPurchasePrice_PreviewTextInput"  Style="{StaticResource ValidationTextbox}" Text="{Binding ReorderLevel,UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
@@ -83,7 +83,7 @@
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Margin="0,15,0,0">
-                <Button Content="Save"
+                <Button Content="Save" Command="{Binding SaveCommand}"
                         Width="90" Height="35"
                         Margin="0,0,10,0"
                         Background="#4CAF50"

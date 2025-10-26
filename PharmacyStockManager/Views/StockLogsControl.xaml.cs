@@ -21,7 +21,7 @@ namespace PharmacyStockManager.Views
             if (_context != null)
                 dgStockLogs.ItemsSource = _context.StockLogs
                     .Include(sl => sl.Product)
-                    .Include(sl => sl.PerformedBy)
+                    .Include(sl => sl.PerformedByNavigation)
                     .ToList();
         }
     }

@@ -6,12 +6,13 @@ namespace PharmacyStockManager.Views
 {
     public partial class CategoriesControl : UserControl
     {
-        public CategoriesControl(AppDbContext context)
+
+        public CategoriesControl()
         {
             InitializeComponent();
 
             // Assign DataContext to the ViewModel, passing context there
-            this.DataContext = new CategoriesViewModel(context);
+            this.DataContext = new CategoriesViewModel();
         }
     }
 }

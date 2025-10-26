@@ -47,7 +47,7 @@ namespace PharmacyStockManager.Views
 
         private void BtnProducts_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new ProductsControl(_context);
+            MainContent.Content = new ProductsControl();
         }
 
         private void BtnPurchases_Click(object sender, RoutedEventArgs e)
@@ -82,7 +82,7 @@ namespace PharmacyStockManager.Views
 
         private void BtnCategories_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new CategoriesControl(_context);
+            MainContent.Content = new CategoriesControl();
         }
 
         private void BtnPurchaseReturns_Click(object sender, RoutedEventArgs e)

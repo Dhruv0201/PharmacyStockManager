@@ -6,10 +6,10 @@ namespace PharmacyStockManager.Views
 {
     public partial class ProductsControl : UserControl
     {
-        public ProductsControl(AppDbContext context)
+        public ProductsControl()
         {
             InitializeComponent();
-            this.DataContext = new ProductsViewModel(context);
+            this.DataContext = new ProductsViewModel();
         }
     }
 }

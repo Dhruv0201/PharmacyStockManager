@@ -21,7 +21,7 @@ namespace PharmacyStockManager.Views
             if (_context != null)
                 dgPurchases.ItemsSource = _context.Purchases
                     .Include(p => p.Supplier)
-                    .Include(p => p.PurchasedBy)
+                    .Include(p => p.PurchasedByNavigation)
                     .ToList();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using PharmacyStockManager.Models;
+using PharmacyStockManager.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -23,56 +24,45 @@ namespace PharmacyStockManager.Views.PopupWindows
         public int QuantityInStock { get; set; }
         public int ReorderLevel { get; set; }
 
-        public ProductDialog(ObservableCollection<Category> categories, ObservableCollection<Supplier> suppliers, Product? existingProduct = null)
+        public ProductDialog()
         {
             InitializeComponent();
+            AddEditProductViewModel viewModel = new AddEditProductViewModel();
+            this.DataContext = viewModel;
+        }
 
-            Categories = categories;
-            Suppliers = suppliers;
-
-            DataContext = this;
-
-            if (existingProduct != null)
-            {
-                IsEditMode = true;
-                ProductName = existingProduct.ProductName;
-                CategoryId = existingProduct.CategoryId ?? 0;
-                SupplierId = existingProduct.SupplierId ?? 0;
-                BatchNumber = existingProduct.BatchNumber;
-                ExpiryDate = existingProduct.ExpiryDate;
-                PurchasePrice = existingProduct.PurchasePrice;
-                SellingPrice = existingProduct.SellingPrice;
-                QuantityInStock = existingProduct.QuantityInStock;
-                ReorderLevel = existingProduct.ReorderLevel;
-            }
+        public ProductDialog(int productId)
+        {
+            InitializeComponent();
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(ProductName))
-            {
-                MessageBox.Show("Product name is required.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (CategoryId == 0)
-            {
-                MessageBox.Show("Please select a category.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (SupplierId == 0)
-            {
-                MessageBox.Show("Please select a supplier.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            DialogResult = true;
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
         }
+
+        private void txtPurchasePrice_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = !e.Text.All(char.IsDigit);
+        }
+
+        private void NumericTextBox_Pasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(DataFormats.Text))
+            {
+                string text = e.DataObject.GetData(DataFormats.Text) as string;
+                if (!text.All(char.IsDigit))
+                    e.CancelCommand();
+            }
+            else
+            {
+                e.CancelCommand();
+            }
+        }
+
     }
 }

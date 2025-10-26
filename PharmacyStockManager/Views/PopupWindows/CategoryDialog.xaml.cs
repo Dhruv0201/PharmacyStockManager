@@ -1,34 +1,31 @@
-﻿using System.Windows;
+﻿using PharmacyStockManager.ViewModel;
+using System.Windows;
 
 namespace PharmacyStockManager.Views.PopupWindows
 {
     public partial class CategoryDialog : Window
     {
-        public string CategoryName => txtName.Text.Trim();
-        public string Description => txtDesc.Text.Trim();
-
-        public CategoryDialog(string? name = "", string? description = "")
+      AddEditCategoryViewModel viewModel;
+        public CategoryDialog()
         {
             InitializeComponent();
-            txtName.Text = name;
-            txtDesc.Text = description;
+            viewModel = new AddEditCategoryViewModel(); 
+            this.DataContext = viewModel;
+            this.viewModel.CloseWindow += ViewModel_CloseWindow;
         }
 
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        public CategoryDialog(int categoryId)
         {
-            if (string.IsNullOrWhiteSpace(txtName.Text))
-            {
-                MessageBox.Show("Category name is required.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            DialogResult = true;
-            Close();
+            InitializeComponent();
+            viewModel = new AddEditCategoryViewModel(categoryId);
+            this.DataContext = viewModel;
+            viewModel.CloseWindow += ViewModel_CloseWindow;
         }
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        private void ViewModel_CloseWindow()
         {
-            DialogResult = false;
-            Close();
+            this.DialogResult = true;
+            this.Close();
         }
     }
 }
