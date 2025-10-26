@@ -4,6 +4,7 @@ namespace PharmacyStockManager.ViewModel
 {
     public class CategoryItemViewModel : ViewModelBase
     {
+        public int SerialNumber { get; set; }
         public int CategoryID { get; set; }
 
         private string _categoryName = string.Empty;
