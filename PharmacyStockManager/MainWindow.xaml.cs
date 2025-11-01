@@ -105,7 +105,7 @@ namespace PharmacyStockManager.Views
         private void BtnCustomers_Click(object sender, RoutedEventArgs e)
         {
             HighlightSelectedButton((Button)sender);
-            MainContent.Content = new CustomersControl(_context);
+            MainContent.Content = new CustomersControl();
         }
 
         private void BtnStockLogs_Click(object sender, RoutedEventArgs e)
