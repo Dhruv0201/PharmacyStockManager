@@ -7,14 +7,31 @@
     <UserControl.Resources>
         <converter:RowNumberToSerialNumberConverter x:Key="RowIndexConverter"/>
     </UserControl.Resources>
-    <Grid Margin="10">
+
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Filters + CRUD -->
             <RowDefinition Height="*"/>
+            <!-- DataGrid -->
         </Grid.RowDefinitions>
 
-        <!-- Header: Filters + CRUD -->
-        <Border Grid.Row="0" Background="#F7F7F7" Padding="10" CornerRadius="5" Margin="0,0,0,10">
+        <!-- HEADER BAR -->
+        <Border Grid.Row="0" Background="White" CornerRadius="7" Padding="10" Margin="0,0,0,10">
+            <DockPanel>
+                <TextBlock Text="Manage Categories"
+                           Foreground="Black"
+                           FontWeight="SemiBold"
+                           FontSize="16"
+                           VerticalAlignment="Center"
+                           DockPanel.Dock="Left"/>
+            </DockPanel>
+        </Border>
+
+        <!-- FILTERS + CRUD -->
+        <Border Grid.Row="1" Background="#F7F7F7" Padding="10" CornerRadius="5" Margin="0,0,0,10">
             <DockPanel>
                 <!-- Right side buttons -->
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
@@ -37,8 +54,9 @@
             </DockPanel>
         </Border>
 
-        <!-- DataGrid -->
-        <DataGrid x:Name="dgCategories" Grid.Row="1"
+        <!-- DATAGRID -->
+        <DataGrid x:Name="dgCategories"
+                  Grid.Row="2"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   IsReadOnly="True"
@@ -57,8 +75,8 @@
                   SnapsToDevicePixels="True"
                   HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Auto"
-                  Background="White"
-                  Margin="0">
+                        Background="White"
+      Margin="0">
 
             <DataGrid.Resources>
                 <!-- Flat column headers -->
@@ -84,8 +102,8 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="DataGridRow">
                                 <Border x:Name="DGR_Border"
-                                        Background="{TemplateBinding Background}"
-                                        SnapsToDevicePixels="True">
+                            Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True">
                                     <DataGridCellsPresenter/>
                                 </Border>
                                 <ControlTemplate.Triggers>
@@ -123,11 +141,11 @@
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Sr No." Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}" Width="50"
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                        ElementStyle="{StaticResource CenterTextStyle}"/>
                 <DataGridTextColumn Header="Name" Binding="{Binding CategoryName}" Width="2*"
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                        ElementStyle="{StaticResource CenterTextStyle}"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="3*"
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                        ElementStyle="{StaticResource CenterTextStyle}"/>
 
                 <!-- Actions column with icons -->
                 <DataGridTemplateColumn Header="Actions" Width="120">
@@ -136,28 +154,27 @@
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
                                 <!-- Edit -->
                                 <Button Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                        CommandParameter="{Binding}" ToolTip="Edit">
+            CommandParameter="{Binding}" ToolTip="Edit">
                                     <Image Source="pack://application:,,,/PharmacyStockManager;component/Resources/Icons/edit_icon.png"
-                           Width="18" Height="18"
-                           Stretch="Uniform"
-                           SnapsToDevicePixels="True"
-                           RenderOptions.BitmapScalingMode="HighQuality"/>
+               Width="18" Height="18"
+               Stretch="Uniform"
+               SnapsToDevicePixels="True"
+               RenderOptions.BitmapScalingMode="HighQuality"/>
                                 </Button>
 
                                 <!-- Delete -->
                                 <Button Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                        CommandParameter="{Binding}" ToolTip="Delete" Margin="5,0,0,0">
+            CommandParameter="{Binding}" ToolTip="Delete" Margin="5,0,0,0">
                                     <Image Source="pack://application:,,,/PharmacyStockManager;component/Resources/Icons/delete_icon.png"
-                           Width="20" Height="20"
-                           Stretch="Uniform"
-                           SnapsToDevicePixels="True"
-                           RenderOptions.BitmapScalingMode="HighQuality"/>
+               Width="20" Height="20"
+               Stretch="Uniform"
+               SnapsToDevicePixels="True"
+               RenderOptions.BitmapScalingMode="HighQuality"/>
                                 </Button>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
