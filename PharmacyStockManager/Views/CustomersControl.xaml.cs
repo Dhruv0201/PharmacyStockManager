@@ -1,25 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyStockManager.Models;
+using PharmacyStockManager.ViewModel;
 using System.Windows.Controls;
 
 namespace PharmacyStockManager.Views
 {
     public partial class CustomersControl : UserControl
     {
-        private readonly AppDbContext _context;
-
-        public CustomersControl() => InitializeComponent();
-
-        public CustomersControl(AppDbContext context) : this()
+        public CustomersControl()
         {
-            _context = context;
-            LoadCustomers();
-        }
+            InitializeComponent();
 
-        private void LoadCustomers()
-        {
-            if (_context != null)
-                dgCustomers.ItemsSource = _context.Customers.ToList();
+            // Assign DataContext to the ViewModel, passing context there
+            this.DataContext = new CustomersViewModel();
         }
     }
 }
