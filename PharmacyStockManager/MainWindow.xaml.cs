@@ -99,7 +99,7 @@ namespace PharmacyStockManager.Views
         private void BtnSuppliers_Click(object sender, RoutedEventArgs e)
         {
             HighlightSelectedButton((Button)sender);
-            MainContent.Content = new SuppliersControl(_context);
+            MainContent.Content = new SuppliersControl();
         }
 
         private void BtnCustomers_Click(object sender, RoutedEventArgs e)

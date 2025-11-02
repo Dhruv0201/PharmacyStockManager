@@ -36,95 +36,31 @@
 
         <!-- DataGrid -->
         <DataGrid x:Name="dgProducts" Grid.Row="1"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  IsReadOnly="True"
                   ItemsSource="{Binding Products}"
-                  SelectionMode="Single"
-                  SelectionUnit="FullRow"
-                  AlternatingRowBackground="#F9F9F9"
-                  RowBackground="White"
-                  GridLinesVisibility="None"
-                  RowHeaderWidth="0"
-                  BorderThickness="0"
-                  FontSize="12"
-                  FontFamily="Segoe UI"
-                  ColumnHeaderHeight="40"
-                  RowHeight="30"
-                  SnapsToDevicePixels="True"
-                  HorizontalScrollBarVisibility="Auto"
-                  VerticalScrollBarVisibility="Auto"
-                  Background="White"
                   Margin="0">
 
-            <DataGrid.Resources>
-                <!-- Flat column headers -->
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="VerticalContentAlignment" Value="Center"/>
-                    <Setter Property="Background" Value="White"/>
-                    <Setter Property="Foreground" Value="#333"/>
-                    <Setter Property="FontWeight" Value="SemiBold"/>
-                    <Setter Property="FontSize" Value="12"/>
-                    <Setter Property="Padding" Value="10,5"/>
-                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                    <Setter Property="BorderBrush" Value="#EEE"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                </Style>
-
-                <!-- Row hover effect -->
-                <Style TargetType="DataGridRow">
-                    <Setter Property="SnapsToDevicePixels" Value="True"/>
-                    <Setter Property="Background" Value="White"/>
-                    <Setter Property="Margin" Value="0"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="DataGridRow">
-                                <Border x:Name="DGR_Border"
-                                        Background="{TemplateBinding Background}"
-                                        SnapsToDevicePixels="True">
-                                    <DataGridCellsPresenter/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="DGR_Border" Property="Background" Value="#F0F8FF"/>
-                                    </Trigger>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="DGR_Border" Property="Background" Value="#D0E4FF"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-
-                <!-- Text vertical centering style -->
-                <Style x:Key="CenterTextStyle" TargetType="TextBlock">
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                </Style>
-            </DataGrid.Resources>
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Sr No." Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}" Width="50" 
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                                    />
                 <DataGridTextColumn Header="Name" Binding="{Binding ProductName}" Width="2*" 
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                                    />
                 <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="2*" 
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                                    />
                 <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="2*" 
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                                    />
                 <DataGridTextColumn Header="Batch No." Binding="{Binding BatchNumber}" Width="100" 
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                                    />
                 <DataGridTextColumn Header="Expiry" Binding="{Binding ExpiryDate}" Width="120" 
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                                    />
                 <DataGridTextColumn Header="Purchase" Binding="{Binding PurchasePrice}" Width="100" 
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                                    />
                 <DataGridTextColumn Header="Selling" Binding="{Binding SellingPrice}" Width="100" 
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                                    />
                 <DataGridTextColumn Header="Qty" Binding="{Binding QuantityInStock}" Width="80" 
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                                    />
                 <DataGridTextColumn Header="Reorder" Binding="{Binding ReorderLevel}" Width="80" 
-                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+                                    />
 
                 <!-- Actions -->
                 <DataGridTemplateColumn Header="Actions" Width="120">
@@ -132,11 +68,11 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        CommandParameter="{Binding}" ToolTip="Edit">
+                                        CommandParameter="{Binding}" Background="Transparent" ToolTip="Edit" BorderBrush="Transparent">
                                     <Image Source="pack://application:,,,/PharmacyStockManager;component/Resources/Icons/edit_icon.png"/>
                                 </Button>
                                 <Button Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        CommandParameter="{Binding}" ToolTip="Delete" Margin="5,0,0,0">
+                                        CommandParameter="{Binding}" ToolTip="Delete" Margin="5,0,0,0" Background="Transparent" BorderBrush="Transparent">
                                     <Image Source="pack://application:,,,/PharmacyStockManager;component/Resources/Icons/delete_icon.png"/>
                                 </Button>
                             </StackPanel>
