@@ -15,6 +15,7 @@ namespace PharmacyStockManager.ViewModel
     {
         private readonly AppDbContext _context = new AppDbContext();
         private ObservableCollection<Category> _categories;
+        public event Action CloseWindow;
         public ObservableCollection<Category> Categories
         {
             get => _categories;
@@ -141,6 +142,8 @@ namespace PharmacyStockManager.ViewModel
             }
         }
         private bool isValidationOn;
+
+
         public string Error => null;
 
         public string this[string columnName]
@@ -201,6 +204,7 @@ namespace PharmacyStockManager.ViewModel
             }
         }   
         public ICommand SaveCommand { get; }
+        public ICommand CancelCommand { get; }
 
         private void SaveProduct(object obj)
         {
@@ -242,16 +246,18 @@ namespace PharmacyStockManager.ViewModel
                 _context.SaveChanges();
 
             }
+            CloseWindow?.Invoke();
         }
 
         public  AddEditProductViewModel()
         {
             BindCategoriesAndProducts();
             SaveCommand = new RelayCommand(SaveProduct, obj => true);
+            CancelCommand = new RelayCommand(obj => CloseWindow?.Invoke(), obj => true);
         }
         public AddEditProductViewModel(int productId) :this()
         {
-            product = _context.Products.Find(product.ProductId);
+            product = _context.Products.Find(productId);
             if (product != null)
             {
                 ProductName = product.ProductName;

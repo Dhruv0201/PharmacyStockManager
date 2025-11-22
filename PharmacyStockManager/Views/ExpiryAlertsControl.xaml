@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="White">
     <Grid Margin="10">
-        <DataGrid x:Name="dgExpiryAlerts" AutoGenerateColumns="False" CanUserAddRows="False">
+        <DataGrid x:Name="dgExpiryAlerts" AutoGenerateColumns="False" CanUserAddRows="False" Style="{StaticResource FlatDataGridStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding ExpiryAlertID}" Width="Auto"/>
                 <DataGridTextColumn Header="Product" Binding="{Binding Product.ProductName}" Width="*"/>

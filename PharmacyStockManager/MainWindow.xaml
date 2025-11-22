@@ -5,8 +5,8 @@
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Background="White">
-
-    <DockPanel>
+    <Grid x:Name="RootLayout">
+        <DockPanel>
 
         <!-- Header -->
         <Border DockPanel.Dock="Top" Background="#4CAF50" Height="60">
@@ -47,4 +47,5 @@
         <ContentControl Name="MainContent" Background="White"/>
 
     </DockPanel>
+    </Grid>
 </Window>

@@ -60,6 +60,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\pkgs\extended.wpf.toolkit\5.0.0\lib\net5.0\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero">
+      <HintPath>..\pkgs\extended.wpf.toolkit\5.0.0\lib\net5.0\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+      <HintPath>..\pkgs\extended.wpf.toolkit\5.0.0\lib\net5.0\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010">
+      <HintPath>..\pkgs\extended.wpf.toolkit\5.0.0\lib\net5.0\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\pkgs\extended.wpf.toolkit\5.0.0\lib\net5.0\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Icons\delete_icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

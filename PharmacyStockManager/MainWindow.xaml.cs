@@ -16,6 +16,10 @@ namespace PharmacyStockManager.Views
         public MainWindow()
         {
             InitializeComponent();
+            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            {
+                Application.Current.MainWindow = this;
+            }
         }
 
         public MainWindow(AppDbContext context): this()
@@ -75,7 +79,7 @@ namespace PharmacyStockManager.Views
         private void BtnPurchases_Click(object sender, RoutedEventArgs e)
         {
             HighlightSelectedButton((Button)sender);
-            MainContent.Content = new PurchasesControl(_context);
+            MainContent.Content = new PurchasesControl();
         }
 
         private void BtnPurchaseReturns_Click(object sender, RoutedEventArgs e)

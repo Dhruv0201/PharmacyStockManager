@@ -1,12 +1,16 @@
-﻿<Window x:Class="PharmacyStockManager.Views.PopupWindows.ProductDialog"
+﻿<ext:ChildWindow x:Class="PharmacyStockManager.Views.PopupWindows.ProductDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Add / Edit Product"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
-        Height="600" Width="500"
+        xmlns:ext ="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:mat="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        IsModal="True"
+       CaptionForeground="Black"
+        CaptionFontSize="14"
+        WindowStartupLocation="Center"
         Background="White">
-
+    <ext:ChildWindow.Caption >
+        Add / Edit Product 
+    </ext:ChildWindow.Caption>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="20">
             <Grid.RowDefinitions>
@@ -30,7 +34,7 @@
                     <TextBlock Text="Category:" FontWeight="SemiBold"/>
                     <ComboBox x:Name="cbCategory" ItemsSource="{Binding Categories}" Style="{StaticResource ValidationCombobox}" SelectedItem="{Binding SelectedCategory,UpdateSourceTrigger=LostFocus,ValidatesOnDataErrors=True}"
                               DisplayMemberPath="CategoryName"
-                              SelectedValuePath="CategoryI"
+                              SelectedValuePath="CategoryId"
                               Height="30"
                               SelectedIndex="0"
                               />
@@ -40,7 +44,7 @@
                     <TextBlock Text="Supplier:" FontWeight="SemiBold"/>
                     <ComboBox x:Name="cbSupplier" ItemsSource="{Binding Suppliers}" Style="{StaticResource ValidationCombobox}" SelectedItem="{Binding SelectedSupplier,UpdateSourceTrigger=LostFocus,ValidatesOnDataErrors=True}"
                               DisplayMemberPath="SupplierName"
-                              SelectedValuePath="SupplierID"
+                              SelectedValuePath="SupplierId"
                               Height="30"
                               SelectedIndex="0"
                               />
@@ -89,14 +93,15 @@
                         Background="#4CAF50"
                         Foreground="White"
                         Style="{StaticResource RoundedActionButton}"
-                        Click="BtnSave_Click"/>
+                        />
                 <Button Content="Cancel"
                         Width="90" Height="35"
                         Background="LightGray"
                         Foreground="Black"
+                        Command="{Binding CancelCommand}"
                         Style="{StaticResource RoundedActionButton}"
-                        Click="BtnCancel_Click"/>
+                       />
             </StackPanel>
         </Grid>
     </ScrollViewer>
-</Window>
+</ext:ChildWindow>

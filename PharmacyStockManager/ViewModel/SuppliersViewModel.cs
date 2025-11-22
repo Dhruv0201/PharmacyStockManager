@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyStockManager.Models;
+using PharmacyStockManager.Views;
 using PharmacyStockManager.Views.PopupWindows;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyStockManager.ViewModel
@@ -64,22 +66,42 @@ namespace PharmacyStockManager.ViewModel
 
         private void AddSupplier()
         {
-            var dialog = new SupplierDialog();
-            if (dialog.ShowDialog() == true)
+            MainWindow main = Application.Current.MainWindow as MainWindow;
+
+            SupplierDialog dialog = new SupplierDialog();
+            dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
+            main.RootLayout.Children.Add(dialog);
+
+            dialog.Closed += (s, e) =>
             {
-                LoadSuppliers(SearchText);
-            }
+                if (dialog.DialogResult == true)
+                    LoadSuppliers(SearchText);
+            main.RootLayout.Children.Remove(dialog);
+            };
+
+            dialog.Show();
+
         }
 
         private void EditSupplier(Supplier supplier)
         {
 
             if (supplier == null) return;
-            var dialog = new SupplierDialog(supplier.SupplierId);
-            if (dialog.ShowDialog() == true)
+            MainWindow main = Application.Current.MainWindow as MainWindow;
+
+            SupplierDialog dialog = new SupplierDialog(supplier.SupplierId);
+            dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
+            main.RootLayout.Children.Add(dialog);
+
+            dialog.Closed += (s, e) =>
             {
-                LoadSuppliers(SearchText);
-            }
+                if (dialog.DialogResult == true)
+                    LoadSuppliers(SearchText);
+                main.RootLayout.Children.Remove(dialog);
+            };
+
+            dialog.Show();
+
         }
 
         private void DeleteSupplier(Supplier supplier)

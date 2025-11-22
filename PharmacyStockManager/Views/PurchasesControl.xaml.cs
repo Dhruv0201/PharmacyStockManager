@@ -1,28 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyStockManager.Models;
+using PharmacyStockManager.ViewModel;
 using System.Windows.Controls;
 
 namespace PharmacyStockManager.Views
 {
     public partial class PurchasesControl : UserControl
     {
-        private readonly AppDbContext _context;
-
-        public PurchasesControl() => InitializeComponent();
-
-        public PurchasesControl(AppDbContext context) : this()
+        public PurchasesControl()
         {
-            _context = context;
-            LoadPurchases();
+            InitializeComponent();
+            PurchasesViewModel purchases = new PurchasesViewModel();
+            this.DataContext = purchases;
         }
-
-        private void LoadPurchases()
-        {
-            if (_context != null)
-                dgPurchases.ItemsSource = _context.Purchases
-                    .Include(p => p.Supplier)
-                    .Include(p => p.PurchasedByNavigation)
-                    .ToList();
-        }
+       
     }
 }

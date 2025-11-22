@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>MaterialDesignExtensions</id>
+    <version>3.3.0</version>
+    <title>Material Design Extensions</title>
+    <authors>Philipp Spiegel</authors>
+    <owners>Philipp Spiegel</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://spiegelp.github.io/MaterialDesignExtensions/#license</licenseUrl>
+    <projectUrl>https://spiegelp.github.io/MaterialDesignExtensions/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/spiegelp/MaterialDesignExtensions/master/icon/icon.png</iconUrl>
+    <description>Material Design Extensions is based on Material Design in XAML Toolkit to provide additional controls and features for WPF apps. The controls might not be specified in the Material Design specification or would crash the scope of Material Design in XAML Toolkit.
+
+Important notice: The configuration for version 2.6.0 changed. See the release notes of this version for details.</description>
+    <summary>Material Design Extensions is based on Material Design in XAML Toolkit to provide additional controls and features for WPF apps. The controls might not be specified in the Material Design specification or would crash the scope of Material Design in XAML Toolkit.</summary>
+    <releaseNotes>https://spiegelp.github.io/MaterialDesignExtensions/#releasenotes
+
+Important notice: The configuration of Material Design Extensions changed in order to enable changing the theme at runtime. Please change your configuration according to App.xaml of the demo.</releaseNotes>
+    <copyright>Copyright (c) 2017-2021 Spiegel Philipp</copyright>
+    <tags>Material Design UI WPF XAML MaterialDesign MD Stepper SideNavigation AppBar Autocomplete FileDialog DirectoryDialog Spinner MaterialWindow Window NavigationRail BusyOverlay</tags>
+    <repository type="git" url="https://github.com/spiegelp/MaterialDesignExtensions" />
+    <dependencies>
+      <dependency id="MaterialDesignColors" version="1.2.7" />
+      <dependency id="MaterialDesignThemes" version="3.2.0" />
+    </dependencies>
+  </metadata>
+</package>

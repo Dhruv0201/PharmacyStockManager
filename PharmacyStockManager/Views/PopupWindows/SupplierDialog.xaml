@@ -1,12 +1,19 @@
-﻿<Window x:Class="PharmacyStockManager.Views.PopupWindows.SupplierDialog"
+﻿<ext:ChildWindow x:Class="PharmacyStockManager.Views.PopupWindows.SupplierDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ext="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PharmacyStockManager.Views.PopupWindows"
         mc:Ignorable="d"
-        Title="Manage Supplier" WindowStartupLocation="CenterScreen" Background="White" Height="450" Width="800">
-    <Grid Margin="15">
+        CaptionForeground="Black"
+        CaptionFontSize="14"
+         Background="White">
+
+    <ext:ChildWindow.Caption>
+        Add / Edit Supplier
+    </ext:ChildWindow.Caption>
+    <Grid Margin="15" Width="320">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -57,4 +64,4 @@
         </StackPanel>
     </Grid>
 
-</Window>
+</ext:ChildWindow>

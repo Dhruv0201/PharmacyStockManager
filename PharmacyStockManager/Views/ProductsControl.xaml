@@ -37,6 +37,7 @@
         <!-- DataGrid -->
         <DataGrid x:Name="dgProducts" Grid.Row="1"
                   ItemsSource="{Binding Products}"
+                   Style="{StaticResource FlatDataGridStyle}"
                   Margin="0">
 
 
@@ -45,9 +46,9 @@
                                     />
                 <DataGridTextColumn Header="Name" Binding="{Binding ProductName}" Width="2*" 
                                     />
-                <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="2*" 
+                <DataGridTextColumn Header="Category" Binding="{Binding Category.CategoryName}" Width="2*" 
                                     />
-                <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="2*" 
+                <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.SupplierName}" Width="2*" 
                                     />
                 <DataGridTextColumn Header="Batch No." Binding="{Binding BatchNumber}" Width="100" 
                                     />

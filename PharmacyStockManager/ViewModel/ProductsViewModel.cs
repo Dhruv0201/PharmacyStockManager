@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyStockManager.Models;
+using PharmacyStockManager.Views;
 using PharmacyStockManager.Views.PopupWindows;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyStockManager.ViewModel
@@ -11,10 +13,41 @@ namespace PharmacyStockManager.ViewModel
     public class ProductsViewModel : ViewModelBase
     {
         private readonly AppDbContext _context = new AppDbContext();
+        public event Action AddPordut;
 
-        public ObservableCollection<Product> Products { get; set; } = new();
-        public ObservableCollection<Category> Categories { get; set; } = new();
-        public ObservableCollection<Supplier> Suppliers { get; set; } = new();
+        private ObservableCollection<Product> _products = new();
+        public ObservableCollection<Product> Products
+        {
+            get => _products;
+            set
+            {
+                _products = value;
+                OnPropertyChanged(nameof(Products));
+            }
+        }
+
+        private ObservableCollection<Category> _categories = new();
+        public ObservableCollection<Category> Categories
+        {
+            get => _categories;
+            set
+            {
+                _categories = value;
+                OnPropertyChanged(nameof(Categories));
+            }
+        }
+
+        private ObservableCollection<Supplier> _suppliers = new();
+        public ObservableCollection<Supplier> Suppliers
+        {
+            get => _suppliers;
+            set
+            {
+                _suppliers = value;
+                OnPropertyChanged(nameof(Suppliers));
+            }
+        }
+
 
         private string _searchText = string.Empty;
         public string SearchText
@@ -65,12 +98,15 @@ namespace PharmacyStockManager.ViewModel
 
         private void AddProduct()
         {
-            var dialog = new ProductDialog();
-
-            if (dialog.ShowDialog() == true)
-            {
+            MainWindow main = Application.Current.MainWindow as MainWindow;
+            ProductDialog productDialog = new ProductDialog();
+            productDialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
+            main?.RootLayout.Children.Add(productDialog);
+            productDialog.Closed += delegate {
                 LoadProducts(SearchText);
-            }
+                main.RootLayout.Children.Remove(productDialog);
+            };
+            productDialog.Show();
         }
 
         private void EditProduct(Product product)
@@ -78,12 +114,15 @@ namespace PharmacyStockManager.ViewModel
 
             if (product == null) return;
 
-            var dialog = new ProductDialog(product.ProductId);
+            MainWindow main = Application.Current.MainWindow as MainWindow;
+            ProductDialog productDialog = new ProductDialog(product.ProductId);
+            productDialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
+            main?.RootLayout.Children.Add(productDialog);
+            productDialog.Closed += delegate { LoadProducts(SearchText);
+                main.RootLayout.Children.Remove(productDialog);
+            };    
+            productDialog.Show();
 
-            if (dialog.ShowDialog() == true)
-            {
-                LoadProducts(SearchText);
-            }
         }
 
 

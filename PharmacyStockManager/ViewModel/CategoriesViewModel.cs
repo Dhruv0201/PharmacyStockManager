@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyStockManager.Models;
+using PharmacyStockManager.Views;
 using PharmacyStockManager.Views.PopupWindows;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyStockManager.ViewModel
@@ -60,22 +62,37 @@ namespace PharmacyStockManager.ViewModel
 
         private void AddCategory()
         {
-            var dialog = new CategoryDialog();
-            if(dialog.ShowDialog() == true)
+            MainWindow main = Application.Current.MainWindow as MainWindow;
+
+            CategoryDialog dialog = new CategoryDialog();
+            dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
+
+            main.RootLayout.Children.Add(dialog);
+
+            dialog.Closed += (s, e) =>
             {
                 LoadCategories(SearchText);
-            }
+                main.RootLayout.Children.Remove(dialog);
+            };
+            dialog.Show();
         }
 
         private void EditCategory(Category category)
         {
-
             if (category == null) return;
-            var dialog = new CategoryDialog(category.CategoryId);
-            if(dialog.ShowDialog() == true)
+            MainWindow main = Application.Current.MainWindow as MainWindow;
+
+            CategoryDialog dialog = new CategoryDialog(category.CategoryId);
+            dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
+
+            main.RootLayout.Children.Add(dialog);
+
+            dialog.Closed += (s, e) =>
             {
                 LoadCategories(SearchText);
-            }
+                main.RootLayout.Children.Remove(dialog);
+            };
+            dialog.Show();
         }
 
         private void DeleteCategory(Category category)

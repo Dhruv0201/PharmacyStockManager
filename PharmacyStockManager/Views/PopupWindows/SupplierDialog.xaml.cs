@@ -11,13 +11,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit;
 
 namespace PharmacyStockManager.Views.PopupWindows
 {
     /// <summary>
     /// Interaction logic for SupplierDialog.xaml
     /// </summary>
-    public partial class SupplierDialog : Window
+    public partial class SupplierDialog : ChildWindow
     {
         AddEditSupplierViewModel viewModel;
         public SupplierDialog()
