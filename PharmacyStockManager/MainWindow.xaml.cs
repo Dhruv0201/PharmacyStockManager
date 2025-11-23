@@ -85,13 +85,13 @@ namespace PharmacyStockManager.Views
         private void BtnPurchaseReturns_Click(object sender, RoutedEventArgs e)
         {
             HighlightSelectedButton((Button)sender);
-            MainContent.Content = new PurchaseReturnsControl(_context);
+            MainContent.Content = new PurchaseReturnsControl();
         }
 
         private void BtnSales_Click(object sender, RoutedEventArgs e)
         {
             HighlightSelectedButton((Button)sender);
-            MainContent.Content = new SalesControl(_context);
+            MainContent.Content = new SalesControl();
         }
 
         private void BtnSaleReturns_Click(object sender, RoutedEventArgs e)

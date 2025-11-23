@@ -1,0 +1,100 @@
+﻿<ext:ChildWindow x:Class="PharmacyStockManager.Views.PopupWindows.SaleDetailDialog"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ext="http://schemas.xceed.com/wpf/xaml/toolkit"
+                 xmlns:mat="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+                 IsModal="True"
+                 CaptionForeground="Black"
+                 CaptionFontSize="14"
+                 WindowStartupLocation="Center"
+                 Background="White">
+
+    <ext:ChildWindow.Caption>
+        Add / Edit Sale Item
+    </ext:ChildWindow.Caption>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Sale Item Details"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Margin="0 0 0 15"/>
+
+            <StackPanel Grid.Row="1" VerticalAlignment="Top">
+
+                <!-- Product -->
+                <StackPanel Margin="0 0 0 10">
+                    <TextBlock Text="Product:" FontWeight="SemiBold"/>
+                    <ComboBox ItemsSource="{Binding Products}"
+                              SelectedItem="{Binding SelectedProduct, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
+                              DisplayMemberPath="ProductName"
+                              SelectedValuePath="ProductId"
+                              Height="30"
+                              Style="{StaticResource ValidationCombobox}"/>
+                </StackPanel>
+
+                <!-- Batch Number -->
+                <StackPanel Margin="0 0 0 10">
+                    <TextBlock Text="Batch Number:" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding BatchNumber, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
+                             Height="30"
+                             Style="{StaticResource ValidationTextbox}"/>
+                </StackPanel>
+
+                <!-- Quantity + Unit Price -->
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <StackPanel Width="200" Margin="0 0 20 0">
+                        <TextBlock Text="Quantity Sold:" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding QuantitySold, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
+                                 Height="30"
+                                 Style="{StaticResource ValidationTextbox}"
+                                 PreviewTextInput="TextBox_PreviewTextInput" DataObject.Pasting ="NumericTextBox_Pasting" />
+                    </StackPanel>
+
+                    <StackPanel Width="200">
+                        <TextBlock Text="Unit Price:" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding UnitPrice, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
+                                 Height="30"
+                                 Style="{StaticResource ValidationTextbox}"
+                                 PreviewTextInput="TextBox_PreviewTextInput" DataObject.Pasting ="NumericTextBox_Pasting" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Total Price -->
+                <StackPanel Margin="0 0 0 10">
+                    <TextBlock Text="Total Price:" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged}"
+                             Height="30"
+                             IsReadOnly="True"
+                             Background="#F3F3F3"/>
+                </StackPanel>
+
+            </StackPanel>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 15 0 0">
+                <Button Content="Save"
+                        Width="90" Height="35"
+                        Command="{Binding SaveCommand}"
+                        Margin="0 0 10 0"
+                        Background="#4CAF50" Foreground="White"
+                        Style="{StaticResource RoundedActionButton}"/>
+
+                <Button Content="Cancel"
+                        Width="90"
+                        Height="35"
+                        Background="LightGray"
+                        Foreground="Black"
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource RoundedActionButton}"/>
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
+</ext:ChildWindow>

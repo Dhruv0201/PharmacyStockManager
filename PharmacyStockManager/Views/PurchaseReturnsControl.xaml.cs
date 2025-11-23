@@ -1,27 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyStockManager.Models;
+using PharmacyStockManager.ViewModel;
 using System.Windows.Controls;
 
 namespace PharmacyStockManager.Views
 {
     public partial class PurchaseReturnsControl : UserControl
     {
-        private readonly AppDbContext _context;
-
-        public PurchaseReturnsControl() => InitializeComponent();
-
-        public PurchaseReturnsControl(AppDbContext context) : this()
+        public PurchaseReturnsControl()
         {
-            _context = context;
-            LoadPurchaseReturns();
+            InitializeComponent();
+            PurchaseReturnViewModel viewModel = new PurchaseReturnViewModel();
+            this.DataContext = viewModel;
         }
-
-        private void LoadPurchaseReturns()
-        {
-            if (_context != null)
-                dgPurchaseReturns.ItemsSource = _context.PurchaseReturnHeaders
-                    .Include(r => r.PurchaseReturnDetails)
-                    .ToList();
-        }
+        
     }
 }
