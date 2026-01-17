@@ -1,81 +1,52 @@
-﻿using PharmacyStockManager.Models;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using PharmacyStockManager.Models;
+using PharmacyStockManager.Views;
+using PharmacyStockManager.Views.PopupWindows;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyStockManager.ViewModel
 {
-    internal class AddEditPurchaseViewModel : ViewModelBase, IDataErrorInfo
+    public class AddEditPurchaseViewModel : ViewModelBase, IDataErrorInfo
     {
         private readonly AppDbContext _context = new AppDbContext();
-        public event Action CloseWindow;
 
-        private ObservableCollection<Supplier> _suppliers;
-        public ObservableCollection<Supplier> Suppliers
-        {
-            get => _suppliers;
-            set
-            {
-                _suppliers = value;
-                OnPropertyChanged(nameof(Suppliers));
-            }
-        }
+        public event Action? CloseWindow;
 
-        private ObservableCollection<UserAccount> _users;
-        public ObservableCollection<UserAccount> Users
-        {
-            get => _users;
-            set
-            {
-                _users = value;
-                OnPropertyChanged(nameof(Users));
-            }
-        }
+        public ObservableCollection<Supplier> Suppliers { get; set; } = new ObservableCollection<Supplier>();
+        public ObservableCollection<Product> Products { get; set; } = new ObservableCollection<Product>();
 
-        private Purchase purchase;
+        private Purchase _purchase = new Purchase();
         public Purchase Purchase
         {
-            get => purchase;
+            get => _purchase;
             set
             {
-                purchase = value;
+                _purchase = value;
                 OnPropertyChanged(nameof(Purchase));
             }
         }
 
-        private Supplier _selectedSupplier;
-        public Supplier SelectedSupplier
+        private Supplier? _supplier = null;
+        public Supplier? Supplier
         {
-            get => _selectedSupplier;
+            get => _supplier;
             set
             {
-                _selectedSupplier = value;
-                OnPropertyChanged(nameof(SelectedSupplier));
+                _supplier = value;
+                Purchase.SupplierId = value?.SupplierId;
+                OnPropertyChanged(nameof(Supplier));
             }
         }
 
-        private UserAccount _selectedPurchasedBy;
-        public UserAccount SelectedPurchasedBy
-        {
-            get => _selectedPurchasedBy;
-            set
-            {
-                _selectedPurchasedBy = value;
-                OnPropertyChanged(nameof(SelectedPurchasedBy));
-            }
-        }
-
-        private DateTime? _purchaseDate = DateTime.Now;
         public DateTime? PurchaseDate
         {
-            get => _purchaseDate;
+            get => Purchase.PurchaseDate;
             set
             {
-                _purchaseDate = value;
+                Purchase.PurchaseDate = value;
                 OnPropertyChanged(nameof(PurchaseDate));
             }
         }
@@ -102,18 +73,133 @@ namespace PharmacyStockManager.ViewModel
             }
         }
 
-        private decimal _totalAmount;
-        public decimal TotalAmount
+        private string _invoiceFileName;
+        public string InvoiceFileName
         {
-            get => _totalAmount;
+            get => _invoiceFileName;
             set
             {
-                _totalAmount = value;
+                _invoiceFileName = value;
+                OnPropertyChanged(nameof(InvoiceFileName));
+            }
+        }
+
+
+        public decimal FinalTotal
+        {
+            get => Purchase.TotalAmount;
+            set
+            {
+                Purchase.TotalAmount = value;
+                OnPropertyChanged(nameof(FinalTotal));
+            }
+        }
+
+        private Product? _product = null;
+        public Product? Product
+        {
+            get => _product;
+            set
+            {
+                _product = value;
+                OnPropertyChanged(nameof(Product));
+            }
+        }
+
+        private string? _batchNumber = null;
+        public string? BatchNumber
+        {
+            get => _batchNumber;
+            set
+            {
+                _batchNumber = value;
+                OnPropertyChanged(nameof(BatchNumber));
+            }
+        }
+
+        private int _quantity;
+        public int Quantity
+        {
+            get => _quantity;
+            set
+            {
+                _quantity = value;
+                OnPropertyChanged(nameof(Quantity));
+                RecalculateTotalAmount();
+            }
+        }
+
+        private decimal _unitPrice;
+        public decimal UnitPrice
+        {
+            get => _unitPrice;
+            set
+            {
+                _unitPrice = value;
+                OnPropertyChanged(nameof(UnitPrice));
+                RecalculateTotalAmount();
+            }
+        }
+
+        private decimal _TotalAmount;
+        public decimal TotalAmount
+        {
+            get => _TotalAmount;
+            set
+            {
+                _TotalAmount = value;
                 OnPropertyChanged(nameof(TotalAmount));
             }
         }
 
-        private bool isValidationOn;
+        private PurchasePayment? _selectedPayment = null;
+        public PurchasePayment? SelectedPayment
+        {
+            get => _selectedPayment;
+            set
+            {
+                _selectedPayment = value;
+                OnPropertyChanged(nameof(SelectedPayment));
+            }
+        }
+
+        private decimal _totalPaid;
+        public decimal TotalPaid
+        {
+            get => _totalPaid;
+            set
+            {
+                _totalPaid = value;
+                OnPropertyChanged(nameof(TotalPaid));
+            }
+        }
+
+        private decimal _dueAmount;
+        public decimal DueAmount
+        {
+            get => _dueAmount;
+            set
+            {
+                _dueAmount = value;
+                OnPropertyChanged(nameof(DueAmount));
+            }
+        }
+
+
+        public ObservableCollection<PurchaseDetail> PurchaseDetails { get; set; } = new ObservableCollection<PurchaseDetail>();
+        public ObservableCollection<PurchasePayment> PurchasePayments { get; set; } = new ObservableCollection<PurchasePayment>();
+        private PurchaseDetail? _editingDetail = null;
+
+        public ICommand AddOrUpdateCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand SaveCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand UploadInvoiceCommand { get; }
+        public ICommand OpenInvoiceCommand { get; }
+        public ICommand AddPurchasePaymentCommand { get; }
+        public ICommand EditPurchasePaymentCommand { get; }
+        public ICommand DeletePurchasePaymentCommand { get; }
+        private bool _isValidationOn = false;
 
         public string Error => null;
 
@@ -121,34 +207,49 @@ namespace PharmacyStockManager.ViewModel
         {
             get
             {
-                if (!isValidationOn)
+                if (!_isValidationOn)
                     return null;
 
                 switch (columnName)
                 {
-                    case nameof(SelectedSupplier):
-                        if (SelectedSupplier == null)
+                    case nameof(Supplier):
+                        if (Supplier == null)
                             return "Supplier is required.";
                         break;
 
                     case nameof(PurchaseDate):
                         if (PurchaseDate == null)
-                            return "Purchase Date is required.";
+                            return "Purchase date is required.";
                         break;
 
                     case nameof(InvoiceNumber):
-                        if (string.IsNullOrEmpty(InvoiceNumber))
-                            return "Invoice Number is required.";
+                        if (string.IsNullOrWhiteSpace(InvoiceNumber))
+                            return "Invoice number is required.";
                         break;
 
-                    case nameof(TotalAmount):
-                        if (TotalAmount <= 0)
-                            return "Total Amount must be greater than zero.";
+                    case nameof(Product):
+                        if (Product == null)
+                            return "Product is required.";
                         break;
 
-                    case nameof(SelectedPurchasedBy):
-                        if (SelectedPurchasedBy == null)
-                            return "Purchased By is required.";
+                    case nameof(BatchNumber):
+                        if (string.IsNullOrWhiteSpace(BatchNumber))
+                            return "Batch number is required.";
+                        break;
+
+                    case nameof(Quantity):
+                        if (Quantity <= 0)
+                            return "Quantity must be greater than zero.";
+                        break;
+
+                    case nameof(UnitPrice):
+                        if (UnitPrice <= 0)
+                            return "Unit price must be greater than zero.";
+                        break;
+
+                    case nameof(PurchaseDetails):
+                        if (PurchaseDetails == null || PurchaseDetails.Count == 0)
+                            return "At least one purchase item is required.";
                         break;
                 }
 
@@ -161,28 +262,195 @@ namespace PharmacyStockManager.ViewModel
             get
             {
                 OnPropertyChanged(null);
-                var properties = GetType().GetProperties();
-                foreach (var prop in properties)
+
+                var props = GetType().GetProperties();
+                foreach (var p in props)
                 {
-                    string err = this[prop.Name];
-                    if (!string.IsNullOrEmpty(err))
+                    if (!string.IsNullOrEmpty(this[p.Name]))
                         return true;
                 }
+
                 return false;
             }
         }
 
-        public ICommand SaveCommand { get; }
-        public ICommand CancelCommand { get; }
-        public ICommand BrowseInvoiceCommand { get; }
 
-        private void SavePurchase(object obj)
+
+        public AddEditPurchaseViewModel()
         {
-            isValidationOn = true;
-            if (HasErrors)
+            InitLookups();
+
+            Purchase = new Purchase
+            {
+                PurchaseDate = DateTime.Today
+            };
+
+            PurchaseDetails = new ObservableCollection<PurchaseDetail>();
+            AddOrUpdateCommand = new RelayCommand(AddOrUpdate);
+            EditCommand = new RelayCommand(EditItem);
+            SaveCommand = new RelayCommand(Save);
+            CancelCommand = new RelayCommand(_ => CloseWindow?.Invoke());
+            UploadInvoiceCommand = new RelayCommand(_ => UploadInvoice());
+            OpenInvoiceCommand = new RelayCommand(_ => OpenInvoice(), _ => !string.IsNullOrEmpty(Purchase?.InvoiceImagePath));
+            AddPurchasePaymentCommand = new RelayCommand(AddPayment, (obj) => FinalTotal != 0);
+            EditPurchasePaymentCommand = new RelayCommand(EditPayment);
+            DeletePurchasePaymentCommand = new RelayCommand(DeletePayment);
+
+        }
+
+        public AddEditPurchaseViewModel(int PurchaseId) : this()
+        {
+            var purchase = _context.Purchases
+                .Where(x => x.PurchaseId == PurchaseId).Include(x => x.PurchaseDetails).Include(x=>x.PurchasePayments).ThenInclude(x=>x.PaidByNavigation)
+                .FirstOrDefault();
+
+            if (purchase != null)
+            {
+                Purchase = purchase;
+                Supplier = Suppliers.FirstOrDefault(x => x.SupplierId == Purchase.SupplierId);
+                PurchaseDate = Purchase.PurchaseDate;
+
+                PurchaseDetails = new ObservableCollection<PurchaseDetail>(
+                    Purchase.PurchaseDetails);
+                PurchasePayments = new ObservableCollection<PurchasePayment>(purchase.PurchasePayments);
+
+                RecalculateFinalTotal();
+                RecalculateDue();
+                InvoiceNumber = Purchase.InvoiceNumber;
+
+                if (!string.IsNullOrEmpty(Purchase.InvoiceImagePath))
+                {
+                    InvoiceFileName = Purchase.InvoiceImagePath;
+                }
+
+            }
+        }
+
+        private void UploadInvoice()
+        {
+            var dlg = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "All Files|*.*|PDF Files|*.pdf|Images|*.jpg;*.png",
+                Multiselect = false
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                InvoiceImagePath = dlg.FileName;
+                InvoiceFileName = System.IO.Path.GetFileName(dlg.FileName);
+            }
+        }
+
+        private void OpenInvoice()
+        {
+            if (string.IsNullOrEmpty(Purchase?.InvoiceImagePath))
                 return;
 
+            string appFolder = AppDomain.CurrentDomain.BaseDirectory;
+            string invoiceFolder = System.IO.Path.Combine(appFolder, "InvoiceFiles");
+            string fullPath = System.IO.Path.Combine(invoiceFolder, Purchase.InvoiceImagePath);
 
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = fullPath,
+                    UseShellExecute = true
+                });
+            }
+        }
+
+
+        private void InitLookups()
+        {
+            Suppliers = new ObservableCollection<Supplier>(
+                _context.Suppliers.OrderBy(x => x.SupplierName).ToList());
+
+            Products = new ObservableCollection<Product>(
+                _context.Products.OrderBy(x => x.ProductName).ToList());
+        }
+
+        private void RecalculateTotalAmount()
+        {
+            TotalAmount = Quantity * UnitPrice;
+        }
+
+        private void AddOrUpdate(object? obj)
+        {
+            if (Product == null || Quantity <= 0 || UnitPrice <= 0)
+                return;
+
+            if (_editingDetail == null)
+            {
+                PurchaseDetails.Add(new PurchaseDetail
+                {
+                    Product = Product,
+                    ProductId = Product.ProductId,
+                    BatchNumber = BatchNumber,
+                    Quantity = Quantity,
+                    UnitPrice = UnitPrice,
+                    TotalPrice = TotalAmount
+                });
+            }
+            else
+            {
+                var index = PurchaseDetails.IndexOf(_editingDetail);
+                if (index >= 0)
+                {
+                    PurchaseDetails[index] = new PurchaseDetail
+                    {
+                        PurchaseDetailId = _editingDetail.PurchaseDetailId,
+                        Product = Product,
+                        ProductId = Product.ProductId,
+                        BatchNumber = BatchNumber,
+                        Quantity = Quantity,
+                        UnitPrice = UnitPrice,
+                        TotalPrice = TotalAmount
+                    };
+                }
+
+                _editingDetail = null;
+            }
+
+            ClearEntry();
+            RecalculateFinalTotal();
+            RecalculateDue();
+        }
+
+        private void EditItem(object? obj)
+        {
+            if (obj is not PurchaseDetail d) return;
+
+            _editingDetail = d;
+            Product = d.Product;
+            BatchNumber = d.BatchNumber;
+            Quantity = d.Quantity;
+            UnitPrice = d.UnitPrice;
+        }
+
+        private void RecalculateFinalTotal()
+        {
+            FinalTotal = PurchaseDetails.Sum(x => x.TotalPrice ?? 0);
+        }
+
+        private void ClearEntry()
+        {
+            Product = null;
+            BatchNumber = null;
+            Quantity = 0;
+            UnitPrice = 0;
+            TotalAmount = 0;
+        }
+
+        private void Save(object? obj)
+        {
+
+            Purchase.PurchaseDetails.Clear();
+            foreach (var d in PurchaseDetails)
+                Purchase.PurchaseDetails.Add(d);
+            Purchase.PurchasePayments.Clear();
+            foreach (var d in PurchasePayments)
+                Purchase.PurchasePayments.Add(d);
             string fileNameOnly = null;
 
             if (!string.IsNullOrEmpty(InvoiceImagePath) && System.IO.File.Exists(InvoiceImagePath))
@@ -195,7 +463,7 @@ namespace PharmacyStockManager.ViewModel
 
                 string extension = System.IO.Path.GetExtension(InvoiceImagePath);
 
-                string safeInvoice = InvoiceNumber
+                string safeInvoice = (InvoiceNumber ?? "Invoice")
                     .Replace(" ", "_")
                     .Replace("/", "_")
                     .Replace("\\", "_")
@@ -207,78 +475,108 @@ namespace PharmacyStockManager.ViewModel
                 System.IO.File.Copy(InvoiceImagePath, newFullPath, overwrite: true);
             }
 
-
-            if (purchase != null)
+            if (fileNameOnly != null)
             {
-                purchase.SupplierId = SelectedSupplier.SupplierId;
-                purchase.PurchaseDate = PurchaseDate;
-                purchase.InvoiceNumber = InvoiceNumber;
-
-                if (fileNameOnly != null)
-                    purchase.InvoiceImagePath = fileNameOnly;
-
-                purchase.TotalAmount = TotalAmount;
-                purchase.PurchasedBy = SelectedPurchasedBy?.UserId;
-                purchase.ModifiedAt = DateTime.Now;
-                purchase.ModifiedBy = App.LoggedInUser.UserId;
+                Purchase.InvoiceImagePath = fileNameOnly;
             }
+
+            Purchase.InvoiceNumber = InvoiceNumber;
+
+
+
+            Purchase.ModifiedAt = DateTime.Now;
+            Purchase.ModifiedBy = App.LoggedInUser.UserId;
+
+            if (Purchase.PurchaseId == 0)
+                _context.Purchases.Add(Purchase);
             else
-            {
-                purchase = new Purchase();
-                purchase.SupplierId = SelectedSupplier.SupplierId;
-                purchase.PurchaseDate = PurchaseDate;
-                purchase.InvoiceNumber = InvoiceNumber;
-                purchase.InvoiceImagePath = fileNameOnly;
-                purchase.TotalAmount = TotalAmount;
-                purchase.PurchasedBy = SelectedPurchasedBy?.UserId;
+                _context.Purchases.Update(Purchase);
 
-                _context.Purchases.Add(purchase);
-            }
+
 
             _context.SaveChanges();
-
             CloseWindow?.Invoke();
         }
 
-
-        public AddEditPurchaseViewModel()
+        private void AddPayment(object obj)
         {
-            BindSuppliersAndUsers();
-            SaveCommand = new RelayCommand(SavePurchase, obj => true);
-            CancelCommand = new RelayCommand(obj => CloseWindow?.Invoke(), obj => true);
-            BrowseInvoiceCommand = new RelayCommand(BrowseInvoice, obj => true);
+            decimal totalAmount = PurchaseDetails.Sum(s => s.TotalPrice ?? 0);
+            decimal paidAmount = PurchasePayments.Sum(p => p.AmountPaid);
+            var dialog = new PurchasePaymentDialog(totalAmount, paidAmount);
+            var main = Application.Current.MainWindow as MainWindow;
+
+            dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
+            main?.RootLayout.Children.Add(dialog);
+
+            dialog.Closed += delegate
+            {
+                if (dialog.DialogResult == true)
+                {
+                    PurchasePayments.Add(dialog.ViewModel.PurchasePayment);
+                    RecalculateDue();
+                }
+                main.RootLayout.Children.Remove(dialog);
+            };
+
+            dialog.Show();
         }
 
-        public AddEditPurchaseViewModel(int purchaseId) : this()
+        private void EditPayment(object obj)
         {
-            purchase = _context.Purchases.Find(purchaseId);
+           if(obj!=null)
+                SelectedPayment = obj as PurchasePayment;
+            if (SelectedPayment == null)
+                return;
 
-            if (purchase != null)
+            decimal totalAmount = PurchaseDetails.Sum(s => s.TotalPrice ?? 0);
+            decimal paidAmount = PurchasePayments.Sum(p => p.AmountPaid) - SelectedPayment.AmountPaid;
+            var dialog = new PurchasePaymentDialog(SelectedPayment, totalAmount, paidAmount);
+            var main = Application.Current.MainWindow as MainWindow;
+
+            dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
+            main?.RootLayout.Children.Add(dialog);
+
+            dialog.Closed += delegate
             {
-                SelectedSupplier = Suppliers.FirstOrDefault(s => s.SupplierId == purchase.SupplierId);
-                PurchaseDate = purchase.PurchaseDate;
-                InvoiceNumber = purchase.InvoiceNumber;
-                InvoiceImagePath = purchase.InvoiceImagePath;
-                TotalAmount = purchase.TotalAmount;
-                SelectedPurchasedBy = Users.FirstOrDefault(u => u.UserId == purchase.PurchasedBy);
+                if (dialog.DialogResult == true)
+                {
+                    var updated = dialog.ViewModel.PurchasePayment;
+                    var index = PurchasePayments.IndexOf(SelectedPayment);
+                    PurchasePayments.RemoveAt(index);
+                    PurchasePayments.Insert(index, updated);
+                }
+                main.RootLayout.Children.Remove(dialog);
+                RecalculateDue();
+            };
+
+            dialog.Show();
+        }
+
+        private void DeletePayment(object obj)
+        {
+            if(obj!=null)
+                SelectedPayment = obj as PurchasePayment;
+            if (SelectedPayment != null)
+            {
+                PurchasePayments.Remove(SelectedPayment);
+                RecalculateDue();
+                SelectedPayment = null;
             }
         }
 
-        private void BindSuppliersAndUsers()
+        private void RecalculateTotal()
         {
-            Suppliers = new ObservableCollection<Supplier>(_context.Suppliers.OrderBy(s => s.SupplierName).ToList());
-            Users = new ObservableCollection<UserAccount>(_context.UserAccounts.OrderBy(u => u.Username).ToList());
+            TotalAmount = PurchaseDetails.Sum(d => d.TotalPrice ?? (d.UnitPrice * d.Quantity));
         }
 
-        private void BrowseInvoice(object obj)
+        private void RecalculateDue()
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.Filter = "Image, PDF and Excel Files|*.jpg;*.jpeg;*.png;*.bmp;*.pdf;*.xlsx;*.xls";
+            decimal billAmount = PurchaseDetails?.Sum(s => s?.TotalPrice ?? 0) ?? 0;
+            decimal paidAmount = PurchasePayments?.Sum(p => p?.AmountPaid ?? 0) ?? 0;
 
-            if (dlg.ShowDialog() == true)
-            {
-                InvoiceImagePath = dlg.FileName;
-            }
+            TotalPaid = paidAmount;
+            DueAmount = billAmount - paidAmount;
         }
+
     }
 }

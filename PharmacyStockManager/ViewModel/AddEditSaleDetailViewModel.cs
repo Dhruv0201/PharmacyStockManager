@@ -1,8 +1,6 @@
 ﻿using PharmacyStockManager.Models;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
 
 namespace PharmacyStockManager.ViewModel
@@ -154,7 +152,6 @@ namespace PharmacyStockManager.ViewModel
             if (saleDetail != null)
             {
                 SelectedProduct = Products.FirstOrDefault(p => p.ProductId == saleDetail.ProductId);
-                BatchNumber = saleDetail.BatchNumber;
                 QuantitySold = saleDetail.QuantitySold;
                 UnitPrice = saleDetail.UnitPrice;
                 TotalPrice = saleDetail.TotalPrice ?? (saleDetail.UnitPrice * saleDetail.QuantitySold);
@@ -176,7 +173,6 @@ namespace PharmacyStockManager.ViewModel
             if (saleDetail != null)
             {
                 saleDetail.ProductId = SelectedProduct.ProductId;
-                saleDetail.BatchNumber = BatchNumber;
                 saleDetail.QuantitySold = QuantitySold;
                 saleDetail.UnitPrice = UnitPrice;
                 saleDetail.TotalPrice = TotalPrice;
@@ -189,7 +185,6 @@ namespace PharmacyStockManager.ViewModel
                 saleDetail = new SaleDetail()
                 {
                     ProductId = SelectedProduct.ProductId,
-                    BatchNumber = BatchNumber,
                     QuantitySold = QuantitySold,
                     UnitPrice = UnitPrice,
                     TotalPrice = TotalPrice,

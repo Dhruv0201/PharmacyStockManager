@@ -1,5 +1,4 @@
-﻿using PharmacyStockManager.Models;
-using PharmacyStockManager.ViewModel;
+﻿using PharmacyStockManager.ViewModel;
 using PharmacyStockManager.Views.PopupWindows;
 using System.Windows;
 using System.Windows.Controls;

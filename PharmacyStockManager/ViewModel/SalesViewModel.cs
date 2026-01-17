@@ -2,9 +2,7 @@
 using PharmacyStockManager.Models;
 using PharmacyStockManager.Views;
 using PharmacyStockManager.Views.PopupWindows;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -41,7 +39,7 @@ namespace PharmacyStockManager.ViewModel
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand RefreshCommand { get; }
-        public ICommand ViewCommand { get; }
+        public ICommand SaleReturnCommand { get; }
 
         public SalesViewModel()
         {
@@ -49,7 +47,7 @@ namespace PharmacyStockManager.ViewModel
             EditCommand = new RelayCommand(obj => EditSale(obj as Sale));
             DeleteCommand = new RelayCommand(obj => DeleteSale(obj as Sale));
             RefreshCommand = new RelayCommand(_ => LoadSales());
-            ViewCommand = new RelayCommand(obj => ViewSale(obj as Sale));
+            SaleReturnCommand = new RelayCommand(obj => ViewSale(obj as Sale));
 
             LoadSales();
         }
@@ -126,20 +124,15 @@ namespace PharmacyStockManager.ViewModel
 
         private void ViewSale(Sale sale)
         {
-            if (sale == null) return;
 
-            //MainWindow main = Application.Current.MainWindow as MainWindow;
-            //SaleViewDialog dlg = new SaleViewDialog(sale.SaleId);
-            //dlg.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
+            var dialog = new SalesReturnDialog(sale.SaleId);
 
-            //main?.RootLayout.Children.Add(dlg);
+            MainWindow main = Application.Current.MainWindow as MainWindow;
+            dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
 
-            //dlg.Closed += delegate
-            //{
-            //    main.RootLayout.Children.Remove(dlg);
-            //};
-
-            //dlg.Show();
+            main?.RootLayout.Children.Add(dialog);
+            // attach childwindow style like before
+            dialog.Show();
         }
 
         private void DeleteSale(Sale sale)

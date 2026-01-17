@@ -1,0 +1,96 @@
+﻿<ext:ChildWindow x:Class="PharmacyStockManager.Views.PopupWindows.SalePaymentDialog"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ext="http://schemas.xceed.com/wpf/xaml/toolkit"
+                 IsModal="True"
+                 xmlns:h="clr-namespace:PharmacyStockManager.Helpers"
+                 CaptionForeground="Black"
+                 CaptionFontSize="14"
+                 WindowStartupLocation="Center"
+                 Background="White">
+
+    <ext:ChildWindow.Caption>
+        Add / Edit Payment
+    </ext:ChildWindow.Caption>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Payment Details"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Margin="0 0 0 15"/>
+
+            <StackPanel Grid.Row="1" VerticalAlignment="Top">
+
+                <!-- Payment Date -->
+                <StackPanel Margin="0 0 0 10">
+                    <TextBlock Text="Payment Date:" FontWeight="SemiBold"/>
+                    <DatePicker SelectedDate="{Binding PaymentDate}"
+                                Height="30"
+                                Style="{StaticResource ValidationDatePicker}"/>
+                </StackPanel>
+
+                <StackPanel Margin="0 0 0 10">
+                    <TextBlock Text="Payment Mode:" FontWeight="SemiBold"/>
+                    <ComboBox SelectedItem="{Binding PaymentMode,ValidatesOnDataErrors=True}"
+                              Height="30"
+                              Style="{StaticResource ValidationCombobox}" ItemsSource="{Binding PaymentModes}"> 
+                    </ComboBox>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <StackPanel Width="200" Margin="0 0 20 0">
+                        <TextBlock Text="Amount Paid:" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding AmountPaid, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
+                                    h:NumericTextboxProperty.IsNumericOnly="True"
+                                 Height="30"
+                                 Style="{StaticResource ValidationTextbox}"/>
+                    </StackPanel>
+
+                    <StackPanel Width="200">
+                        <TextBlock Text="Due Amount:" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding DueAmount}"
+                                 Background="#F3F3F3"
+                                 IsReadOnly="True"
+                                 Height="30"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Margin="0 0 0 10">
+                    <TextBlock Text="Collected By:" FontWeight="SemiBold"/>
+                    <ComboBox ItemsSource="{Binding Users}"
+                              SelectedItem="{Binding SelectedCollectedBy, UpdateSourceTrigger=LostFocus,ValidatesOnDataErrors=True}"
+                              DisplayMemberPath="Username"
+                              SelectedValuePath="UserId"
+                              Height="30"
+                              Style="{StaticResource ValidationCombobox}"/>
+                </StackPanel>
+
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 15 0 0">
+                <Button Content="Save"
+                        Width="90" Height="35"
+                        Command="{Binding SaveCommand}"
+                        Margin="0 0 10 0"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        Style="{StaticResource RoundedActionButton}"/>
+
+                <Button Content="Cancel"
+                        Width="90" Height="35"
+                        Background="LightGray"
+                        Foreground="Black"
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource RoundedActionButton}"/>
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
+</ext:ChildWindow>

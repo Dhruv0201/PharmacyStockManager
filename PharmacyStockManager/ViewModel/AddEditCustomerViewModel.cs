@@ -1,10 +1,5 @@
 ﻿using PharmacyStockManager.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PharmacyStockManager.ViewModel
@@ -96,9 +91,9 @@ namespace PharmacyStockManager.ViewModel
             CancelCommand = new RelayCommand((obj) => CloseWindow?.Invoke(), (obj) => true);
         }
 
-        public AddEditCustomerViewModel(int customerId) : this()
+        public AddEditCustomerViewModel(int CustomerId) : this()
         {
-            Customer = _context.Customers.Find(customerId);
+            Customer = _context.Customers.Find(CustomerId);
         }
 
         private void ExecuteSave(object obj)

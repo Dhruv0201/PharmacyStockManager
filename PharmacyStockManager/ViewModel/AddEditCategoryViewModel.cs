@@ -1,10 +1,5 @@
 ﻿using PharmacyStockManager.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PharmacyStockManager.ViewModel
@@ -20,7 +15,7 @@ namespace PharmacyStockManager.ViewModel
             set
             {
                 _categoryName = value;
-                OnPropertyChanged(nameof(CategoryName)); 
+                OnPropertyChanged(nameof(CategoryName));
             }
         }
         private string _description = string.Empty;
@@ -30,7 +25,7 @@ namespace PharmacyStockManager.ViewModel
             set
             {
                 _description = value;
-                 OnPropertyChanged(nameof(Description)); 
+                OnPropertyChanged(nameof(Description));
             }
         }
 
@@ -49,7 +44,7 @@ namespace PharmacyStockManager.ViewModel
                 OnPropertyChanged(nameof(Category));
             }
         }
-        
+
         public ICommand SaveCommand { get; }
 
         public ICommand CancelCommand { get; }
@@ -77,7 +72,7 @@ namespace PharmacyStockManager.ViewModel
         {
             get
             {
-                if(!isValidationOn)
+                if (!isValidationOn)
                 {
                     return string.Empty;
                 }
@@ -98,13 +93,13 @@ namespace PharmacyStockManager.ViewModel
 
         public AddEditCategoryViewModel()
         {
-            SaveCommand = new RelayCommand(ExecuteSave, (obj)=>true);
+            SaveCommand = new RelayCommand(ExecuteSave, (obj) => true);
             CancelCommand = new RelayCommand((obj) => CloseWindow?.Invoke(), (obj) => true);
         }
 
-        public AddEditCategoryViewModel(int categoryId) : this()
+        public AddEditCategoryViewModel(int CategoryId) : this()
         {
-            Category = _context.Categories.Find(categoryId);
+            Category = _context.Categories.Find(CategoryId);
         }
 
         private void ExecuteSave(object obj)

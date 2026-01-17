@@ -1,28 +1,26 @@
 ﻿using PharmacyStockManager.Models;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
 
 namespace PharmacyStockManager.ViewModel
 {
-    public class AddEditPaymentViewModel : ViewModelBase, IDataErrorInfo
+    public class AddEditPurchasePaymentViewModel : ViewModelBase, IDataErrorInfo
     {
         private readonly AppDbContext _context = new AppDbContext();
         public event Action CloseWindow;
 
         public ObservableCollection<UserAccount> Users { get; set; }
-        public ObservableCollection<String> PaymentModes { get; set; }
+        public ObservableCollection<string> PaymentModes { get; set; }
 
-        private SalePayment salePayment;
-        public SalePayment SalePayment
+        private PurchasePayment purchasePayment;
+        public PurchasePayment PurchasePayment
         {
-            get => salePayment;
+            get => purchasePayment;
             set
             {
-                salePayment = value;
-                OnPropertyChanged(nameof(SalePayment));
+                purchasePayment = value;
+                OnPropertyChanged(nameof(PurchasePayment));
             }
         }
 
@@ -48,7 +46,7 @@ namespace PharmacyStockManager.ViewModel
             }
         }
 
-        private decimal AmmountAlreadyPaid;
+        private decimal AmountAlreadyPaid;
         private decimal _amountPaid;
         public decimal AmountPaid
         {
@@ -72,14 +70,14 @@ namespace PharmacyStockManager.ViewModel
             }
         }
 
-        private UserAccount _selectedCollectedBy;
-        public UserAccount SelectedCollectedBy
+        private UserAccount _selectedPaidBy;
+        public UserAccount SelectedPaidBy
         {
-            get => _selectedCollectedBy;
+            get => _selectedPaidBy;
             set
             {
-                _selectedCollectedBy = value;
-                OnPropertyChanged(nameof(SelectedCollectedBy));
+                _selectedPaidBy = value;
+                OnPropertyChanged(nameof(SelectedPaidBy));
             }
         }
 
@@ -123,9 +121,9 @@ namespace PharmacyStockManager.ViewModel
                             return "Amount paid must be greater than zero.";
                         break;
 
-                    case nameof(SelectedCollectedBy):
-                        if (SelectedCollectedBy == null)
-                            return "Collected by is required.";
+                    case nameof(SelectedPaidBy):
+                        if (SelectedPaidBy == null)
+                            return "Paid by is required.";
                         break;
                 }
 
@@ -151,36 +149,40 @@ namespace PharmacyStockManager.ViewModel
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public AddEditPaymentViewModel(decimal totalAmmount,decimal paidAmmount)
+        public AddEditPurchasePaymentViewModel(decimal totalAmount, decimal paidAmount)
         {
-            AmmountAlreadyPaid = paidAmmount;
-            TotalBillAmount = totalAmmount;
-            DueAmount = totalAmmount - paidAmmount;
+            AmountAlreadyPaid = paidAmount;
+            TotalBillAmount = totalAmount;
+            DueAmount = totalAmount - paidAmount;
+
             LoadUsers();
+
             PaymentModes = new ObservableCollection<string>
             {
                 "Cash",
                 "Card",
                 "UPI",
                 "Bank Transfer",
-                "cheque"
+                "Cheque"
             };
+
             SaveCommand = new RelayCommand(SavePayment, obj => true);
             CancelCommand = new RelayCommand(obj => CloseWindow?.Invoke(), obj => true);
         }
 
-        public AddEditPaymentViewModel(SalePayment payment, decimal totalAmmount, decimal paidAmmount) : this(totalAmmount, paidAmmount)
+        public AddEditPurchasePaymentViewModel(PurchasePayment payment, decimal totalAmount, decimal paidAmount)
+            : this(totalAmount, paidAmount)
         {
-            SalePayment = payment;
+            PurchasePayment = payment;
 
-            if (SalePayment != null)
+            if (PurchasePayment != null)
             {
-                PaymentDate = SalePayment.PaymentDate;
-                PaymentMode = SalePayment.PaymentMode;
-                AmountPaid = SalePayment.AmountPaid;
-                DueAmount = SalePayment.DueAmount;
+                PaymentDate = PurchasePayment.PaymentDate;
+                PaymentMode = PurchasePayment.PaymentMode;
+                AmountPaid = PurchasePayment.AmountPaid;
+                DueAmount = PurchasePayment.DueAmount;
 
-                SelectedCollectedBy = Users.FirstOrDefault(u => u.UserId == SalePayment.CollectedBy);
+                //SelectedPaidBy = Users.FirstOrDefault(u => u.UserId == PurchasePayment.PaidBy);
             }
         }
 
@@ -192,7 +194,7 @@ namespace PharmacyStockManager.ViewModel
 
         private void RecalculateDue()
         {
-            DueAmount = TotalBillAmount - AmmountAlreadyPaid - AmountPaid;
+            DueAmount = TotalBillAmount - AmountAlreadyPaid - AmountPaid;
         }
 
         private void SavePayment(object obj)
@@ -202,26 +204,28 @@ namespace PharmacyStockManager.ViewModel
             if (HasErrors)
                 return;
 
-            if (SalePayment != null)
+            if (PurchasePayment != null)
             {
-                SalePayment.PaymentDate = PaymentDate;
-                SalePayment.PaymentMode = PaymentMode;
-                SalePayment.AmountPaid = AmountPaid;
-                SalePayment.DueAmount = DueAmount;
-                SalePayment.CollectedBy = SelectedCollectedBy?.UserId;
-                SalePayment.ModifiedAt = DateTime.Now;
-                SalePayment.ModifiedBy = App.LoggedInUser.UserId;
+                PurchasePayment.PaymentDate = PaymentDate;
+                PurchasePayment.PaymentMode = PaymentMode;
+                PurchasePayment.AmountPaid = AmountPaid;
+                PurchasePayment.DueAmount = DueAmount;
+                PurchasePayment.PaidBy = SelectedPaidBy?.UserId;
+                PurchasePayment.PaidByNavigation = SelectedPaidBy;
+
+                PurchasePayment.ModifiedAt = DateTime.Now;
+                PurchasePayment.ModifiedBy = App.LoggedInUser.UserId;
             }
             else
             {
-                SalePayment = new SalePayment()
+                PurchasePayment = new PurchasePayment()
                 {
                     PaymentDate = PaymentDate,
                     PaymentMode = PaymentMode,
                     AmountPaid = AmountPaid,
                     DueAmount = DueAmount,
-                    CollectedBy = SelectedCollectedBy?.UserId,
-                    CollectedByNavigation = SelectedCollectedBy
+                    PaidBy = SelectedPaidBy?.UserId,
+                    PaidByNavigation = SelectedPaidBy
                 };
             }
 

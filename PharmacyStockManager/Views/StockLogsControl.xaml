@@ -5,7 +5,7 @@
     <Grid Margin="10">
         <DataGrid x:Name="dgStockLogs" AutoGenerateColumns="False" CanUserAddRows="False" Style="{StaticResource FlatDataGridStyle}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Log ID" Binding="{Binding StockLogID}" Width="Auto"/>
+                <DataGridTextColumn Header="Log ID" Binding="{Binding StockLogId}" Width="Auto"/>
                 <DataGridTextColumn Header="Product" Binding="{Binding Product.ProductName}" Width="*"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*"/>
                 <DataGridTextColumn Header="Action" Binding="{Binding ActionType}" Width="*"/>

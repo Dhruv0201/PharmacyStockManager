@@ -76,16 +76,6 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
-                                <Button Background="Transparent" BorderBrush="Transparent"
-                                        Command="{Binding DataContext.ViewCommand,
-                                                          RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        CommandParameter="{Binding}">
-                                    <TextBlock Text="View"
-                                               Foreground="Blue"
-                                               TextDecorations="Underline"
-                                               Cursor="Hand"/>
-                                </Button>
-
                                 <Button Background="Transparent" Margin="10,0,0,0"
                                         BorderBrush="Transparent"
                                         Command="{Binding DataContext.EditCommand,
@@ -102,6 +92,15 @@
                                         CommandParameter="{Binding}">
                                     <Image Width="16"
                                            Source="pack://application:,,,/PharmacyStockManager;component/Resources/Icons/delete_icon.png"/>
+                                </Button>
+                            <Button Background="Transparent" BorderBrush="Transparent"
+                            Command="{Binding DataContext.SaleReturnCommand,
+                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                            CommandParameter="{Binding}">
+                                                    <TextBlock Text="Return"
+                                   Foreground="Blue"
+                                   TextDecorations="Underline"
+                                   Cursor="Hand"/>      
                                 </Button>
 
                             </StackPanel>

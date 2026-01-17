@@ -2,10 +2,8 @@
 using PharmacyStockManager.Models;
 using PharmacyStockManager.Views;
 using PharmacyStockManager.Views.PopupWindows;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -21,7 +19,7 @@ namespace PharmacyStockManager.ViewModel
         public ObservableCollection<SaleDetail> SaleDetails { get; set; } = new();
         public ObservableCollection<SalePayment> SalePayments { get; set; } = new();
 
-        public SaleDetail SelectedSaleDetail { get; set;  }
+        public SaleDetail SelectedSaleDetail { get; set; }
         public SalePayment SelectedPayment { get; set; }
 
         private Sale sale;
@@ -176,69 +174,20 @@ namespace PharmacyStockManager.ViewModel
             CancelCommand = new RelayCommand(obj => CloseWindow?.Invoke(), obj => true);
 
             AddItemCommand = new RelayCommand(AddItem);
-            EditItemCommand = new RelayCommand(EditItem,(obj) => SelectedSaleDetail!=null);
-            DeleteItemCommand = new RelayCommand(DeleteItem, (obj) => SelectedSaleDetail != null);
+            EditItemCommand = new RelayCommand(EditItem);
+            DeleteItemCommand = new RelayCommand(DeleteItem);
 
             AddPaymentCommand = new RelayCommand(AddPayment, (obj) => TotalAmount != 0);
-            EditPaymentCommand = new RelayCommand(EditPayment,(obj) => SelectedPayment!=null);
-            DeletePaymentCommand = new RelayCommand(DeletePayment, (obj) => SelectedPayment != null);
-
-            SelectionSaleDetail = new RelayCommand(SelectProductRow);
-            SelectionPaymentDetail = new RelayCommand(SelectPaymentRow);
+            EditPaymentCommand = new RelayCommand(EditPayment);
+            DeletePaymentCommand = new RelayCommand(DeletePayment);
         }
 
-        private void SelectPaymentRow(object obj)
-        {
-           if(obj != null && obj is SalePayment payment)
-            {
-                if (payment != null && payment.IsSelected)
-                {
-                    foreach (var item in SalePayments)
-                    {
-                        if (item != payment)
-                        {
-                            item.IsSelected = false;
-                            OnPropertyChanged(nameof(item.IsSelected));
-                        }
-                    }
-                    SelectedPayment = payment;
-                }
-                else
-                {
-                    SelectedPayment = null;
-                }
-            }
-        }
-
-        private void SelectProductRow(object obj)
-        {
-            if(obj != null && obj is SaleDetail detail)
-            {
-                if(detail != null && detail.IsSelected)
-                {
-                    foreach (var item in SaleDetails)
-                    {
-                        if (item != detail)
-                        {
-                            item.IsSelected = false;
-                            OnPropertyChanged(nameof(item.IsSelected));
-                        }
-                    }
-                    SelectedSaleDetail = detail;
-                }
-                else
-                {
-                    SelectedSaleDetail = null;
-                }
-            }
-        }
-
-        public AddEditSaleViewModel(int saleId) : this()
+        public AddEditSaleViewModel(int SaleId) : this()
         {
             sale = _context.Sales
-                .Include(s => s.SaleDetails)
+                .Include(s => s.SaleDetails).ThenInclude(x=>x.Product)
                 .Include(s => s.SalePayments)
-                .FirstOrDefault(s => s.SaleId == saleId);
+                .FirstOrDefault(s => s.SaleId == SaleId);
 
             if (sale != null)
             {
@@ -250,6 +199,7 @@ namespace PharmacyStockManager.ViewModel
 
                 SaleDetails = new ObservableCollection<SaleDetail>(sale.SaleDetails);
                 SalePayments = new ObservableCollection<SalePayment>(sale.SalePayments);
+                RecalculateDue();
             }
         }
 
@@ -273,6 +223,7 @@ namespace PharmacyStockManager.ViewModel
                 {
                     SaleDetails.Add(dialog.ViewModel.SaleDetail);
                     RecalculateTotal();
+                    RecalculateDue();
                 }
                 productWindow.RootLayout.Children.Remove(dialog);
             };
@@ -282,7 +233,9 @@ namespace PharmacyStockManager.ViewModel
 
         private void EditItem(object obj)
         {
-            if (SelectedSaleDetail==null)
+            if (obj != null)
+                SelectedSaleDetail = obj as SaleDetail;
+            if (SelectedSaleDetail == null)
                 return;
 
             var dialog = new SaleDetailDialog(SelectedSaleDetail);
@@ -300,6 +253,7 @@ namespace PharmacyStockManager.ViewModel
                     SaleDetails.RemoveAt(index);
                     SaleDetails.Insert(index, updated);
                     RecalculateTotal();
+                    RecalculateDue();
                 }
                 main.RootLayout.Children.Remove(dialog);
             };
@@ -309,10 +263,13 @@ namespace PharmacyStockManager.ViewModel
 
         private void DeleteItem(object obj)
         {
-            if (SelectedSaleDetail!=null)
+            if (obj != null)
+                SelectedSaleDetail = obj as SaleDetail;
+            if (SelectedSaleDetail != null)
             {
                 SaleDetails.Remove(SelectedSaleDetail);
                 RecalculateTotal();
+                RecalculateDue();
                 SelectedSaleDetail = null;
             }
         }
@@ -321,7 +278,7 @@ namespace PharmacyStockManager.ViewModel
         {
             decimal totalAmount = SaleDetails.Sum(s => s.TotalPrice ?? 0);
             decimal paidAmount = SalePayments.Sum(p => p.AmountPaid);
-            var dialog = new PaymentDialog(totalAmount,paidAmount);
+            var dialog = new SalePaymentDialog(totalAmount, paidAmount);
             var main = Application.Current.MainWindow as MainWindow;
 
             dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
@@ -342,12 +299,14 @@ namespace PharmacyStockManager.ViewModel
 
         private void EditPayment(object obj)
         {
-            if (SelectedPayment==null)
+            if (obj != null)
+                SelectedPayment = obj as SalePayment;
+            if (SelectedPayment == null)
                 return;
 
             decimal totalAmount = SaleDetails.Sum(s => s.TotalPrice ?? 0);
             decimal paidAmount = SalePayments.Sum(p => p.AmountPaid) - SelectedPayment.AmountPaid;
-            var dialog = new PaymentDialog(SelectedPayment, totalAmount, paidAmount);
+            var dialog = new SalePaymentDialog(SelectedPayment, totalAmount, paidAmount);
             var main = Application.Current.MainWindow as MainWindow;
 
             dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
@@ -361,6 +320,7 @@ namespace PharmacyStockManager.ViewModel
                     var index = SalePayments.IndexOf(SelectedPayment);
                     SalePayments.RemoveAt(index);
                     SalePayments.Insert(index, updated);
+                    RecalculateDue();
                 }
                 main.RootLayout.Children.Remove(dialog);
             };
@@ -370,7 +330,9 @@ namespace PharmacyStockManager.ViewModel
 
         private void DeletePayment(object obj)
         {
-          if(SelectedPayment !=null)
+            if (obj != null)
+                SelectedPayment = obj as SalePayment;
+            if (SelectedPayment != null)
             {
                 SalePayments.Remove(SelectedPayment);
                 RecalculateDue();
@@ -385,8 +347,8 @@ namespace PharmacyStockManager.ViewModel
 
         private void RecalculateDue()
         {
-            decimal billAmount = SaleDetails.Sum(s => s.TotalPrice ?? 0);
-            decimal paidAmount = SalePayments.Sum(p => p.AmountPaid);
+            decimal billAmount = SaleDetails?.Sum(s => s?.TotalPrice ?? 0) ?? 0;
+            decimal paidAmount = SalePayments?.Sum(p => p?.AmountPaid ?? 0) ?? 0;
 
             TotalPaid = paidAmount;
             DueAmount = billAmount - paidAmount;

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PharmacyStockManager.Models;
-using PharmacyStockManager.ViewModel;
+﻿using PharmacyStockManager.ViewModel;
 using System.Windows.Controls;
 
 namespace PharmacyStockManager.Views
@@ -13,6 +11,6 @@ namespace PharmacyStockManager.Views
             PurchaseReturnViewModel viewModel = new PurchaseReturnViewModel();
             this.DataContext = viewModel;
         }
-        
+
     }
 }

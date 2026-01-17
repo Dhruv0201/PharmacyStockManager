@@ -1,120 +1,290 @@
 ﻿<ext:ChildWindow x:Class="PharmacyStockManager.Views.PopupWindows.PurchaseDialog"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ext="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:mat="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
-        IsModal="True"
-        CaptionForeground="Black"
-        CaptionFontSize="14"
-        WindowStartupLocation="Center"
-        Background="White">
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ext="http://schemas.xceed.com/wpf/xaml/toolkit"
+                 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                 xmlns:h="clr-namespace:PharmacyStockManager.Helpers"
+                 WindowStartupLocation="Center"
+                 IsModal="True"
+                 CaptionForeground="Black"
+                 CaptionFontSize="14"
+                 Background="White">
 
     <ext:ChildWindow.Caption>
-        Add / Edit Purchase
+        Purchase
     </ext:ChildWindow.Caption>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="700">
+        <Grid Margin="20" Width="1200">
 
-        <Grid Margin="20" Width="450">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <!-- Header -->
                 <RowDefinition Height="Auto"/>
+                <!-- Supplier -->
+                <RowDefinition Height="Auto"/>
+                <!-- Invoice -->
+                <RowDefinition Height="Auto"/>
+                <!-- Item Entry -->
+                <RowDefinition Height="Auto"/>
+                <!-- Add Item -->
+                <RowDefinition Height="*"/>
+                <!-- Items Grid -->
+                <RowDefinition Height="*"/>
+                <!-- Payments -->
+                <RowDefinition Height="Auto"/>
+                <!-- Save -->
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Purchase Details"
+            <!-- Header -->
+            <TextBlock Text="Purchase"
                        FontSize="20"
                        FontWeight="Bold"
                        Margin="0,0,0,15"/>
 
-            <StackPanel Grid.Row="1" VerticalAlignment="Top">
+            <!-- Supplier / Date / Invoice -->
+            <Grid Grid.Row="1" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <StackPanel Margin="0,0,0,10">
-                    <TextBlock Text="Supplier:" FontWeight="SemiBold"/>
-                    <ComboBox Height="30"
-                              ItemsSource="{Binding Suppliers}"
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Text="Supplier"/>
+                    <ComboBox ItemsSource="{Binding Suppliers}"
+                              SelectedItem="{Binding Supplier,ValidatesOnDataErrors=True}"
                               DisplayMemberPath="SupplierName"
-                              SelectedItem="{Binding SelectedSupplier, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
-                              SelectedValuePath="SupplierId"
+                              Height="30"
                               Style="{StaticResource ValidationCombobox}"/>
                 </StackPanel>
 
-                <StackPanel Margin="0,0,0,10">
-                    <TextBlock Text="Purchase Date:" FontWeight="SemiBold"/>
-                    <DatePicker Height="30"
-                                SelectedDate="{Binding PurchaseDate, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
-                                Style="{StaticResource ValidationDatePicker}" />
-                </StackPanel>
-
-                <StackPanel Margin="0,0,0,10">
-                    <TextBlock Text="Invoice Number:" FontWeight="SemiBold"/>
-                    <TextBox Height="30"
-                             Text="{Binding InvoiceNumber, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
-                             Style="{StaticResource ValidationTextbox}"/>
-                </StackPanel>
-
-                <StackPanel Margin="0,0,0,10">
-                    <TextBlock Text="Invoice Image:" FontWeight="SemiBold"/>
-
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Height="30"
-                                 Width="300"
-                                 Text="{Binding InvoiceImagePath}"
-                                  />
-
-                        <Button Content="Browse"
-                                Margin="10,0,0,0"
-                                Width="80"
+                <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                    <TextBlock Text="Purchase Date"/>
+                    <DatePicker SelectedDate="{Binding PurchaseDate,ValidatesOnDataErrors=True}"
                                 Height="30"
-                                Command="{Binding BrowseInvoiceCommand}"
-                                Background="#1976D2"
-                                Foreground="White"
-                                Style="{StaticResource RoundedActionButton}"/>
-                    </StackPanel>
+                                Style="{StaticResource ValidationDatePicker}"/>
                 </StackPanel>
 
-                <StackPanel Margin="0,0,0,10">
-                    <TextBlock Text="Total Amount:" FontWeight="SemiBold"/>
-                    <TextBox Height="30"
-                             PreviewTextInput="TextBox_PreviewTextInput"
-                             DataObject.Pasting="TextBox_Pasting"
-                             Text="{Binding TotalAmount, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
-                             Style="{StaticResource ValidationTextbox}"/>
+                <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                    <TextBlock Text="Invoice Number"/>
+                    <TextBox Text="{Binding InvoiceNumber,ValidatesOnDataErrors =True}" Style="{StaticResource ValidationTextbox}" Height="30"/>
                 </StackPanel>
 
-                <StackPanel Margin="0,0,0,10">
-                    <TextBlock Text="Purchased By:" FontWeight="SemiBold"/>
-                    <ComboBox Height="30"
-                              ItemsSource="{Binding Users}"
-                              DisplayMemberPath="Username"
-                              SelectedItem="{Binding SelectedPurchasedBy, UpdateSourceTrigger=LostFocus,ValidatesOnDataErrors=True}"
-                              SelectedValuePath="UserId"
+                
+                <StackPanel Grid.Column="3"
+                            Orientation="Horizontal"
+                            Margin="10,15,0,0">
+                    <TextBlock Text="Final Total : "
+                               FontWeight="Bold"
+                               Foreground="Green"
+                               FontSize="15"/>
+                    <TextBlock Text="{Binding FinalTotal}"
+                               FontWeight="Bold"
+                               Foreground="Green"
+                               FontSize="15"/>
+
+                    <TextBlock Text="Due Amount: "
+            FontWeight="Bold"
+            Foreground="Red"
+            FontSize="15" Margin="10 0 0 0"/>
+                    <TextBlock Text="{Binding DueAmount}"
+            FontWeight="Bold"
+            Foreground="Red"
+            FontSize="15"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="2" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Invoice File" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
+                    <Button Content="Upload" Width="90" Height="30" Command="{Binding UploadInvoiceCommand}" Style="{StaticResource RoundedActionButton}"  Background="#4CAF50"
+ Foreground="White"/>
+                    <TextBlock Text="{Binding InvoiceFileName}" Margin="10,7,0,0" Width="300" TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+            </Grid> 
+            <!-- Item Entry -->
+            <Grid Grid.Row="3" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Text="Product"/>
+                    <ComboBox ItemsSource="{Binding Products}"
+                              SelectedItem="{Binding Product,ValidatesOnDataErrors=True}"
+                              DisplayMemberPath="ProductName"
+                              Height="30"
                               Style="{StaticResource ValidationCombobox}"/>
                 </StackPanel>
 
-            </StackPanel>
-            <StackPanel Grid.Row="2"
+                <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                    <TextBlock Text="Batch Number"/>
+                    <TextBox Text="{Binding BatchNumber,ValidatesOnDataErrors=True}"
+                             Height="30"
+                             Style="{StaticResource ValidationTextbox}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                    <TextBlock Text="Quantity"/>
+                    <TextBox Text="{Binding Quantity,ValidatesOnDataErrors=True}"
+                             h:NumericTextboxProperty.IsNumericOnly="True"
+                             Height="30"
+                             Style="{StaticResource ValidationTextbox}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                    <TextBlock Text="Unit Price"/>
+                    <TextBox Text="{Binding UnitPrice,ValidatesOnDataErrors=True}"
+                             h:NumericTextboxProperty.IsNumericOnly="True"
+                             Height="30"
+                             Style="{StaticResource ValidationTextbox}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="Total"/>
+                    <TextBox Text="{Binding TotalAmount,ValidatesOnDataErrors=True}"
+                             Height="30"
+                             IsReadOnly="True"
+                             Style="{StaticResource ValidationTextbox}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Add Item -->
+            <StackPanel Grid.Row="4"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
-                        Margin="0,15,0,0">
-
-                <Button Content="Save"
-                        Width="90"
+                        Margin="0,0,0,10">
+                <Button Content="Add / Update"
+                        Width="120"
                         Height="35"
+                        Command="{Binding AddOrUpdateCommand}"
                         Background="#4CAF50"
                         Foreground="White"
-                        Command="{Binding SaveCommand}"
-                        Style="{StaticResource RoundedActionButton}"
-                        Margin="0,0,10,0"/>
-
-                <Button Content="Cancel"
-                        Width="90"
-                        Height="35"
-                        Background="LightGray"
-                        Foreground="Black"
-                        Command="{Binding CancelCommand}"
                         Style="{StaticResource RoundedActionButton}"/>
             </StackPanel>
+
+            <!-- Purchased Items -->
+            <StackPanel Grid.Row="5" Margin="0,0,0,10">
+                <TextBlock Text="Purchased Items"
+                           FontWeight="SemiBold"
+                           FontSize="15"
+                           Margin="0,0,0,5"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <DataGrid ItemsSource="{Binding PurchaseDetails}"
+                          AutoGenerateColumns="False" 
+                          MaxHeight="220"
+                          Style="{StaticResource FlatDataGridStyle}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <DataGrid.Columns>
+                        <DataGridTextColumn Header="Product" Binding="{Binding Product.ProductName}" Width="2*"/>
+                        <DataGridTextColumn Header="Batch" Binding="{Binding BatchNumber}" Width="*"/>
+                        <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="*"/>
+                        <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice}" Width="*"/>
+                        <DataGridTextColumn Header="Total" Binding="{Binding TotalPrice}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                </ScrollViewer>
+            </StackPanel>
+
+            <!-- Payments -->
+            <StackPanel Grid.Row="6" Margin="0,20,0,0">
+
+                <TextBlock Text="Payments"
+                           FontWeight="SemiBold"
+                           FontSize="16"
+                           Margin="0,0,0,10"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <DataGrid ItemsSource="{Binding PurchasePayments}"
+                          AutoGenerateColumns="False"
+                          MaxHeight="130"
+                          Style="{StaticResource FlatDataGridStyle}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding DataContext.EditPurchasePaymentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Mode"
+                                            Width="2*"
+                                            Binding="{Binding PaymentMode}"/>
+
+                        <DataGridTextColumn Header="Amount"
+                                            Width="*"
+                                            Binding="{Binding AmountPaid}"/>
+
+                        <DataGridTextColumn Header="Date"
+                                            Width="*"
+                                            Binding="{Binding PaymentDate, StringFormat=dd/MM/yyyy}"/>
+
+                            <DataGridTextColumn Header="Paid By"
+                                            Width="*"
+                                            Binding="{Binding PaidByNavigation.FullName}"/>
+                            <DataGridTemplateColumn Width="50">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Command="{Binding DataContext.DeletePurchasePaymentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                CommandParameter="{Binding}" ToolTip="Delete" Margin="5,0,0,0" Background="Transparent" BorderBrush="Transparent">
+                                            <Image Source="pack://application:,,,/PharmacyStockManager;component/Resources/Icons/delete_icon.png"/>
+                                        </Button>   
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                </DataGrid>
+                </ScrollViewer>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,10,0,0">
+
+                    <Button Content="Add Payment"
+                            Command="{Binding AddPurchasePaymentCommand}"
+                            Width="120"
+                            Height="30"
+                            Style="{StaticResource RoundedActionButton}"
+                            Background="#4CAF50"
+                            Foreground="White"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Save / Cancel -->
+            <StackPanel Grid.Row="7"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,20,0,0">
+
+                <Button Content="Save"
+                        Command="{Binding SaveCommand}"
+                        Width="100"
+                        Height="35"
+                        Style="{StaticResource RoundedActionButton}"
+                        Background="#4CAF50"
+                        Foreground="White"/>
+
+                <Button Content="Cancel"
+                        Command="{Binding CancelCommand}"
+                        Width="100"
+                        Height="35"
+                        Margin="10,0"
+                        Style="{StaticResource RoundedActionButton}"
+                        Background="LightGray"
+                        Foreground="Black"/>
+            </StackPanel>
+
         </Grid>
     </ScrollViewer>
 </ext:ChildWindow>

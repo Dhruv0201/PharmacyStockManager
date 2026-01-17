@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
 
 namespace PharmacyStockManager.Helpers
 {
@@ -26,7 +22,7 @@ namespace PharmacyStockManager.Helpers
             return (HashedPassword: hashed, Salt: salt);
         }
 
-      
+
         public static bool VerifyPassword(string password, string storedHashBase64, string storedSaltBase64)
         {
             if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(storedHashBase64) || string.IsNullOrEmpty(storedSaltBase64))

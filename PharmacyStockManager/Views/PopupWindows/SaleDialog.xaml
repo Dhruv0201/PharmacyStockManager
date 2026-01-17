@@ -3,6 +3,7 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:ext="http://schemas.xceed.com/wpf/xaml/toolkit"
                  WindowStartupLocation="Center"
+                xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                  IsModal="True"
                  CaptionForeground="Black"
                  CaptionFontSize="14"
@@ -65,9 +66,24 @@
                                   Height="30"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1">
-                        <TextBlock Text="Total Amount" FontWeight="SemiBold"/>
-                        <TextBox Text="{Binding TotalAmount}" Height="30" IsEnabled="False"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="10 10 0 0">
+                        <TextBlock Text="Final Total : "
+                   FontWeight="Bold"
+                   Foreground="Green"
+                   FontSize="15"/>
+                        <TextBlock Text="{Binding TotalAmount}"
+                   FontWeight="Bold"
+                   Foreground="Green"
+                   FontSize="15"/>
+
+                        <TextBlock Text="Due Amount: "
+                    FontWeight="Bold"
+                    Foreground="Red"
+                    FontSize="15" Margin="10 0 0 0"/>
+                                        <TextBlock Text="{Binding DueAmount}"
+                    FontWeight="Bold"
+                    Foreground="Red"
+                    FontSize="15"/> 
                     </StackPanel>
                 </Grid>
 
@@ -82,25 +98,29 @@
                               HorizontalScrollBarVisibility="Auto"
                               Style="{StaticResource FlatDataGridStyle}"
                               MaxHeight="140">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding DataContext.EditItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
 
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Width="40">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                  Command="{Binding DataContext.SelectionSaleDetail,
-                                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                  CommandParameter="{Binding}"
-                                                  HorizontalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
                             <DataGridTextColumn Header="Product" Width="2*" Binding="{Binding Product.ProductName}"/>
                             <DataGridTextColumn Header="Batch" Width="*" Binding="{Binding BatchNumber}"/>
                             <DataGridTextColumn Header="Qty" Width="80" Binding="{Binding QuantitySold}"/>
                             <DataGridTextColumn Header="Unit Price" Width="120" Binding="{Binding UnitPrice}"/>
                             <DataGridTextColumn Header="Total" Width="120" Binding="{Binding TotalPrice}"/>
+                            <DataGridTemplateColumn Width="50">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Command="{Binding DataContext.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+CommandParameter="{Binding}" ToolTip="Delete" Margin="5,0,0,0" Background="Transparent" BorderBrush="Transparent" Cursor="Hand">
+                                            <Image Source="pack://application:,,,/PharmacyStockManager;component/Resources/Icons/delete_icon.png"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -110,19 +130,6 @@
                                 Width="100" Height="30"
                                 Style="{StaticResource RoundedActionButton}"
                                 Background="#4CAF50" Foreground="White"/>
-
-                        <Button Content="Edit Item"
-                                Margin="10,0"
-                                Command="{Binding EditItemCommand}"
-                                Width="100" Height="30"
-                                 Background="#4CAF50" Foreground="White"
-                                Style="{StaticResource RoundedActionButton}"/>
-
-                        <Button Content="Delete Item"
-                                Command="{Binding DeleteItemCommand}"
-                                Width="100" Height="30"
-                                Style="{StaticResource RoundedActionButton}"
-                                Background="#E57373" Foreground="White"/>
                     </StackPanel>
 
                 </StackPanel>
@@ -138,25 +145,27 @@
                               AutoGenerateColumns="False"
                               MaxHeight="130"
                               Style="{StaticResource FlatDataGridStyle}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding DataContext.EditPaymentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
 
                         <DataGrid.Columns>
-
-                            <DataGridTemplateColumn Width="40">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                                  Command="{Binding DataContext.SelectionPaymentDetail,
-                                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                  CommandParameter="{Binding}"
-                                                  HorizontalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
                             <DataGridTextColumn Header="Mode" Width="2*" Binding="{Binding PaymentMode}"/>
                             <DataGridTextColumn Header="Amount" Width="*" Binding="{Binding AmountPaid}"/>
                             <DataGridTextColumn Header="Date" Width="*" Binding="{Binding PaymentDate,StringFormat=dd/MM/yyyy}"/>
                             <DataGridTextColumn Header="Collected By" Width="*" Binding="{Binding CollectedByNavigation.Username}"/>
+                            <DataGridTemplateColumn Width="50">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Command="{Binding DataContext.DeletePaymentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+CommandParameter="{Binding}" ToolTip="Delete" Margin="5,0,0,0" Background="Transparent" BorderBrush="Transparent">
+                                            <Image Source="pack://application:,,,/PharmacyStockManager;component/Resources/Icons/delete_icon.png"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -166,19 +175,6 @@
                                 Width="120" Height="30"
                                 Style="{StaticResource RoundedActionButton}"
                                 Background="#4CAF50" Foreground="White"/>
-
-                        <Button Content="Edit Payment"
-                                Margin="10,0"
-                                Command="{Binding EditPaymentCommand}"
-                                Width="120" Height="30"
-                                 Background="#4CAF50" Foreground="White"
-                                Style="{StaticResource RoundedActionButton}"/>
-
-                        <Button Content="Delete Payment"
-                                Command="{Binding DeletePaymentCommand}"
-                                Width="120" Height="30"
-                                Style="{StaticResource RoundedActionButton}"
-                                Background="#E57373" Foreground="White"/>
                     </StackPanel>
                 </StackPanel>
 

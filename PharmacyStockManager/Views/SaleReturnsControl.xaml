@@ -6,7 +6,7 @@
         <DataGrid x:Name="dgSaleReturns" AutoGenerateColumns="False" CanUserAddRows="False" Style="{StaticResource FlatDataGridStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Return ID" Binding="{Binding SaleReturnHeaderID}" Width="Auto"/>
-                <DataGridTextColumn Header="Sale ID" Binding="{Binding SaleID}" Width="*"/>
+                <DataGridTextColumn Header="Sale ID" Binding="{Binding SaleId}" Width="*"/>
                 <DataGridTextColumn Header="Product" Binding="{Binding Product.ProductName}" Width="*"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*"/>
                 <DataGridTextColumn Header="Return Date" Binding="{Binding ReturnDate}" Width="*"/>

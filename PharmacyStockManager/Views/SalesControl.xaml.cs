@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PharmacyStockManager.Models;
-using PharmacyStockManager.ViewModel;
-using System.Linq;
+﻿using PharmacyStockManager.ViewModel;
 using System.Windows.Controls;
 
 namespace PharmacyStockManager.Views

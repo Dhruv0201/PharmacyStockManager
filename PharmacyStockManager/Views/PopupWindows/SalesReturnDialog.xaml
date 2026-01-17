@@ -1,0 +1,206 @@
+﻿<ext:ChildWindow x:Class="PharmacyStockManager.Views.PopupWindows.SalesReturnDialog"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ext="http://schemas.xceed.com/wpf/xaml/toolkit"
+                 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                 WindowStartupLocation="Center"
+                 xmlns:h="clr-namespace:PharmacyStockManager.Helpers"
+                 IsModal="True"
+                 CaptionForeground="Black"
+                 CaptionFontSize="14"
+                 Background="White">
+
+    <ext:ChildWindow.Caption>
+        Sale Return
+    </ext:ChildWindow.Caption>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="650">
+        <Grid Margin="20" Height="700" Width="1200">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Sale Return"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Margin="0,0,0,15"/>
+
+            <Grid Grid.Row="1" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="400"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Text="Customer"/>
+                    <TextBox Text="{Binding CustomerName}" IsEnabled="False" Height="30" IsReadOnly="True"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Return Date"/>
+                    <DatePicker SelectedDate="{Binding ReturnDate,ValidatesOnDataErrors=True}" Style="{StaticResource ValidationDatePicker}"  Height="30"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2"  Margin="10,15,0,0" Orientation="Horizontal" >
+                    <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Foreground="Red" FontSize="15" Text="Total Ammount to Return : ">
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="15" Foreground="Red" Text="{Binding TotalReturnAmount}">
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Reason"/>
+                    <TextBox Text="{Binding Reason,ValidatesOnDataErrors=True}" Style="{StaticResource ValidationTextbox}" AcceptsReturn="True" Height="50"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="0.25*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Text="Product"/>
+                    <TextBox Text="{Binding SelectedProductName,ValidatesOnDataErrors=True}" Style="{StaticResource ValidationTextbox}" IsEnabled="False" Height="30" IsReadOnly="True"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                    <TextBlock Text="Batch Number"/>
+                    <TextBox Text="{Binding BatchNumber,ValidatesOnDataErrors=True}" Style="{StaticResource ValidationTextbox}" Height="30" IsEnabled="False"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                    <TextBlock Text="Sold Qty"/>
+                    <TextBox Text="{Binding SoldQty,ValidatesOnDataErrors=True}" Style="{StaticResource ValidationTextbox}" Height="30" IsEnabled="False"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                    <TextBlock Text="Unit Price"/>
+                    <TextBox h:NumericTextboxProperty.IsNumericOnly="True" IsEnabled="False" Text="{Binding UnitPrice,ValidatesOnDataErrors=True}" Style="{StaticResource ValidationTextbox}" Height="30"/>
+                </StackPanel>
+              
+
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="Sale Amount"/>
+                    <TextBox Text="{Binding SaleAmount,ValidatesOnDataErrors=True}" Style="{StaticResource ValidationTextbox}" Height="30" IsEnabled="False"/>
+                </StackPanel>
+                <StackPanel Grid.Column="5"  Margin="10,0,0,0"  >
+                    <TextBlock Text="Return Qty"/>
+                    <TextBox Text="{Binding ReturnQty,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,ValidatesOnDataErrors=True}" Style="{StaticResource ValidationTextbox}" h:NumericTextboxProperty.IsNumericOnly="True" Height="30"/>
+                </StackPanel>
+                <StackPanel Grid.Column="6" Margin="10,0,0,0">
+                <TextBlock Text="Retunable amount"/>
+                    <TextBox Text="{Binding ReturnAmountForProduct}" IsEnabled="False" Height="30" IsReadOnly="True"/>
+            </StackPanel>
+
+              
+            </Grid>
+
+            <StackPanel Grid.Row="4">
+                <Button Content="Return"  Style="{StaticResource RoundedActionButton}" Command="{Binding ReturnCommand}" Width="100" Height="35" Margin="10,0,0,0" Background="#4CAF50" Foreground="White" HorizontalAlignment="Right"></Button>
+            </StackPanel>
+            <StackPanel Grid.Row="5" Margin="0,0,0,10">
+                <TextBlock Text="Sold Items" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,5"/>
+
+                <DataGrid ItemsSource="{Binding SoldItems}"
+                          AutoGenerateColumns="False"
+                          MaxHeight="150"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          Style="{StaticResource FlatDataGridStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding DataContext.SoldItemDoubleClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Product" Width="2*" Binding="{Binding Product.ProductName}"/>
+                        <DataGridTextColumn Header="Batch" Width="*" Binding="{Binding BatchNumber}"/>
+                        <DataGridTextColumn Header="Qty Sold" Width="*" Binding="{Binding QuantitySold}"/>
+                        <DataGridTextColumn Header="Unit Price" Width="*" Binding="{Binding UnitPrice}"/>
+                        <DataGridTextColumn Header="Total" Width="*" Binding="{Binding TotalPrice}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+
+            <StackPanel Grid.Row="6" Margin="0,10,0,10">
+                <TextBlock Text="Returned Items" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,5"/>
+
+                <DataGrid ItemsSource="{Binding ReturnItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                          AutoGenerateColumns="False"
+                          MaxHeight="150"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          Style="{StaticResource FlatDataGridStyle}">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Product" Width="2*" Binding="{Binding Product.ProductName}"/>
+                        <DataGridTextColumn Header="Batch" Width="*" Binding="{Binding BatchNumber}"/>
+                        <DataGridTextColumn Header="Return Qty" Width="*" Binding="{Binding ReturnQty,Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Unit Price" Width="*" Binding="{Binding SoldAmount}"/>
+                        <DataGridTextColumn Header="Total" Width="*" Binding="{Binding ReturnAmount}"/>
+
+                        <DataGridTemplateColumn Width="120" Header="Actions">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button 
+                                                Width="40" BorderBrush="Transparent" Background="Transparent" Cursor="Hand"
+                                                Command="{Binding DataContext.EditReturnItemCommand,
+                                                RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}">
+                                            <Image Width="16"
+        Source="/Resources/Icons/edit_icon.png"/>
+                                        </Button>
+
+                                        <Button 
+                                                Width="40" Margin="5,0,0,0" BorderBrush="Transparent" Background="Transparent" Cursor="Hand"
+                                                Command="{Binding DataContext.DeleteReturnItemCommand,
+                                                RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}">
+                                            <Image Width="16"
+Source="/Resources/Icons/delete_icon.png"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+
+            <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+
+
+                <Button Content="Save"  Style="{StaticResource RoundedActionButton}"
+                        Width="100" Height="35" Margin="10,0,0,0"
+                        Background="#4CAF50" Foreground="White"
+                        Command="{Binding SaveCommand}"/>
+
+                <Button Content="Cancel"  Style="{StaticResource RoundedActionButton}"
+                        Width="100" Height="35" Margin="10,0,0,0"
+                        Background="LightGray" Foreground="Black"
+                        Command="{Binding CancelCommand}"/>
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
+</ext:ChildWindow>

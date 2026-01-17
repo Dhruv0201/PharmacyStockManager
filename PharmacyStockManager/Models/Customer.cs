@@ -15,6 +15,8 @@ public partial class Customer
 
     public DateTime? ModifiedAt { get; set; }
 
+    public virtual ICollection<ReturnDetail> ReturnDetails { get; set; } = new List<ReturnDetail>();
+
     public virtual ICollection<SaleReturnHeader> SaleReturnHeaders { get; set; } = new List<SaleReturnHeader>();
 
     public virtual ICollection<Sale> Sales { get; set; } = new List<Sale>();

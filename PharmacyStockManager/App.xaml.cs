@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PharmacyStockManager.Models;
 using PharmacyStockManager.Views;
-using System;
 using System.IO;
 using System.Windows;
 

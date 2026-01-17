@@ -1,17 +1,11 @@
 ﻿using PharmacyStockManager.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace PharmacyStockManager.ViewModel
 {
-    internal class AddEditProductViewModel : ViewModelBase,IDataErrorInfo
+    internal class AddEditProductViewModel : ViewModelBase, IDataErrorInfo
     {
         private readonly AppDbContext _context = new AppDbContext();
         private ObservableCollection<Category> _categories;
@@ -202,7 +196,7 @@ namespace PharmacyStockManager.ViewModel
                 }
                 return false;
             }
-        }   
+        }
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
@@ -249,15 +243,15 @@ namespace PharmacyStockManager.ViewModel
             CloseWindow?.Invoke();
         }
 
-        public  AddEditProductViewModel()
+        public AddEditProductViewModel()
         {
             BindCategoriesAndProducts();
             SaveCommand = new RelayCommand(SaveProduct, obj => true);
             CancelCommand = new RelayCommand(obj => CloseWindow?.Invoke(), obj => true);
         }
-        public AddEditProductViewModel(int productId) :this()
+        public AddEditProductViewModel(int ProductId) : this()
         {
-            product = _context.Products.Find(productId);
+            product = _context.Products.Find(ProductId);
             if (product != null)
             {
                 ProductName = product.ProductName;
@@ -285,6 +279,6 @@ namespace PharmacyStockManager.ViewModel
             }
         }
 
-       
+
     }
 }

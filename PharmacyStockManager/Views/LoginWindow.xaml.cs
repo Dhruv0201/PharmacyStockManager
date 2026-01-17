@@ -1,10 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using PharmacyStockManager.Helpers;
-using PharmacyStockManager.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PharmacyStockManager.Models;
 using PharmacyStockManager.ViewModel;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,9 +23,9 @@ namespace PharmacyStockManager.Views
 
         private void LoginViewModel_LoginFailed()
         {
-          PasswordBox.Clear();
-          txtUserName.Clear();
-          txtUserName.Focus();
+            PasswordBox.Clear();
+            txtUserName.Clear();
+            txtUserName.Focus();
         }
 
         private void LoginViewModel_ChangeWindow()
@@ -62,7 +58,7 @@ namespace PharmacyStockManager.Views
         {
             if (e.Key == Key.Enter && loginViewModel != null && loginViewModel.LoginCommand.CanExecute(null))
             {
-              loginViewModel.LoginCommand.Execute(null);
+                loginViewModel.LoginCommand.Execute(null);
             }
         }
 

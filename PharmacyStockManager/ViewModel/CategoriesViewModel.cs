@@ -2,9 +2,7 @@
 using PharmacyStockManager.Models;
 using PharmacyStockManager.Views;
 using PharmacyStockManager.Views.PopupWindows;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -18,7 +16,8 @@ namespace PharmacyStockManager.ViewModel
         public ObservableCollection<Category> Categories
         {
             get => _categories;
-            set{
+            set
+            {
                 _categories = value;
                 OnPropertyChanged(nameof(Categories));
             }

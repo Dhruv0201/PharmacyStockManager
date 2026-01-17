@@ -27,6 +27,8 @@ public partial class Purchase
 
     public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
 
+    public virtual ICollection<PurchasePayment> PurchasePayments { get; set; } = new List<PurchasePayment>();
+
     public virtual ICollection<PurchaseReturnHeader> PurchaseReturnHeaders { get; set; } = new List<PurchaseReturnHeader>();
 
     public virtual UserAccount? PurchasedByNavigation { get; set; }

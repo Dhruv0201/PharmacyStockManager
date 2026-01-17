@@ -43,6 +43,8 @@ public partial class Product
 
     public virtual ICollection<PurchaseReturnDetail> PurchaseReturnDetails { get; set; } = new List<PurchaseReturnDetail>();
 
+    public virtual ICollection<ReturnProduct> ReturnProducts { get; set; } = new List<ReturnProduct>();
+
     public virtual ICollection<SaleDetail> SaleDetails { get; set; } = new List<SaleDetail>();
 
     public virtual ICollection<SaleReturnDetail> SaleReturnDetails { get; set; } = new List<SaleReturnDetail>();

@@ -1,24 +1,23 @@
 ﻿using PharmacyStockManager.ViewModel;
-using System.Windows;
 using Xceed.Wpf.Toolkit;
 
 namespace PharmacyStockManager.Views.PopupWindows
 {
     public partial class CategoryDialog : ChildWindow
     {
-      AddEditCategoryViewModel viewModel;
+        AddEditCategoryViewModel viewModel;
         public CategoryDialog()
         {
             InitializeComponent();
-            viewModel = new AddEditCategoryViewModel(); 
+            viewModel = new AddEditCategoryViewModel();
             this.DataContext = viewModel;
             this.viewModel.CloseWindow += ViewModel_CloseWindow;
         }
 
-        public CategoryDialog(int categoryId)
+        public CategoryDialog(int CategoryId)
         {
             InitializeComponent();
-            viewModel = new AddEditCategoryViewModel(categoryId);
+            viewModel = new AddEditCategoryViewModel(CategoryId);
             this.DataContext = viewModel;
             viewModel.CloseWindow += ViewModel_CloseWindow;
         }

@@ -23,6 +23,8 @@ public partial class Sale
 
     public virtual UserAccount? ModifiedByNavigation { get; set; }
 
+    public virtual ICollection<ReturnDetail> ReturnDetails { get; set; } = new List<ReturnDetail>();
+
     public virtual ICollection<SaleDetail> SaleDetails { get; set; } = new List<SaleDetail>();
 
     public virtual ICollection<SalePayment> SalePayments { get; set; } = new List<SalePayment>();

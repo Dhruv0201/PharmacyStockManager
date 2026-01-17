@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PharmacyStockManager.Models;
 
@@ -45,6 +44,10 @@ public partial class UserAccount
     public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
 
     public virtual ICollection<Purchase> PurchaseModifiedByNavigations { get; set; } = new List<Purchase>();
+
+    public virtual ICollection<PurchasePayment> PurchasePaymentModifiedByNavigations { get; set; } = new List<PurchasePayment>();
+
+    public virtual ICollection<PurchasePayment> PurchasePaymentPaidByNavigations { get; set; } = new List<PurchasePayment>();
 
     public virtual ICollection<Purchase> PurchasePurchasedByNavigations { get; set; } = new List<Purchase>();
 

@@ -1,8 +1,6 @@
 ﻿using PharmacyStockManager.Models;
 using PharmacyStockManager.ViewModel;
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
 
 public class AddEditSupplierViewModel : ViewModelBase, IDataErrorInfo
@@ -122,9 +120,9 @@ public class AddEditSupplierViewModel : ViewModelBase, IDataErrorInfo
         CancelCommand = new RelayCommand((obj) => CloseWindow?.Invoke(), (obj) => true);
     }
 
-    public AddEditSupplierViewModel(int supplierId) : this()
+    public AddEditSupplierViewModel(int SupplierId) : this()
     {
-        Supplier = _context.Suppliers.Find(supplierId);
+        Supplier = _context.Suppliers.Find(SupplierId);
     }
 
     private void ExecuteSave(object obj)

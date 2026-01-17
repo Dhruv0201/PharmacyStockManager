@@ -2,9 +2,7 @@
 using PharmacyStockManager.Models;
 using PharmacyStockManager.Views;
 using PharmacyStockManager.Views.PopupWindows;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -88,7 +86,7 @@ namespace PharmacyStockManager.ViewModel
         public void LoadProducts(string? filter = null)
         {
             Products.Clear();
-            Products = new ObservableCollection<Product> (_context.Products
+            Products = new ObservableCollection<Product>(_context.Products
                 .AsNoTracking()
                 .Include(p => p.Category)
                 .Include(p => p.Supplier)
@@ -102,7 +100,8 @@ namespace PharmacyStockManager.ViewModel
             ProductDialog productDialog = new ProductDialog();
             productDialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
             main?.RootLayout.Children.Add(productDialog);
-            productDialog.Closed += delegate {
+            productDialog.Closed += delegate
+            {
                 LoadProducts(SearchText);
                 main.RootLayout.Children.Remove(productDialog);
             };
@@ -118,9 +117,11 @@ namespace PharmacyStockManager.ViewModel
             ProductDialog productDialog = new ProductDialog(product.ProductId);
             productDialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
             main?.RootLayout.Children.Add(productDialog);
-            productDialog.Closed += delegate { LoadProducts(SearchText);
+            productDialog.Closed += delegate
+            {
+                LoadProducts(SearchText);
                 main.RootLayout.Children.Remove(productDialog);
-            };    
+            };
             productDialog.Show();
 
         }

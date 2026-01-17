@@ -22,7 +22,7 @@ namespace PharmacyStockManager.Views
             }
         }
 
-        public MainWindow(AppDbContext context): this()
+        public MainWindow(AppDbContext context) : this()
         {
             _context = context;
 

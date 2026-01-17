@@ -1,7 +1,4 @@
-﻿using PharmacyStockManager.Models;
-using PharmacyStockManager.ViewModel;
-using System;
-using System.Collections.ObjectModel;
+﻿using PharmacyStockManager.ViewModel;
 using System.Windows;
 using Xceed.Wpf.Toolkit;
 
@@ -21,10 +18,10 @@ namespace PharmacyStockManager.Views.PopupWindows
             };
         }
 
-        public ProductDialog(int productId)
+        public ProductDialog(int ProductId)
         {
             InitializeComponent();
-            AddEditProductViewModel viewModel = new AddEditProductViewModel(productId);
+            AddEditProductViewModel viewModel = new AddEditProductViewModel(ProductId);
             this.DataContext = viewModel;
             viewModel.CloseWindow += () =>
             {
@@ -35,7 +32,7 @@ namespace PharmacyStockManager.Views.PopupWindows
 
         private void txtPurchasePrice_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            e.Handled = !e.Text.All(ch=> char.IsDigit(ch) || ch == '.');
+            e.Handled = !e.Text.All(ch => char.IsDigit(ch) || ch == '.');
         }
 
         private void NumericTextBox_Pasting(object sender, DataObjectPastingEventArgs e)

@@ -1,14 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyStockManager.Helpers;
 using PharmacyStockManager.Models;
-using PharmacyStockManager.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -41,7 +34,7 @@ namespace PharmacyStockManager.ViewModel
 
         private bool CanExecuteLogin(object obj)
         {
-           return !string.IsNullOrWhiteSpace(Username) && Password != null && Password.Length > 0;
+            return !string.IsNullOrWhiteSpace(Username) && Password != null && Password.Length > 0;
         }
         private void CreateAdminUserIfNotExists()
         {
@@ -89,7 +82,7 @@ namespace PharmacyStockManager.ViewModel
                     .AsNoTracking()
                     .FirstOrDefault(u => u.Username == username);
 
-                if(user != null)
+                if (user != null)
                 {
                     var storedHash = user.HashedPassword?.Trim() ?? "";
                     var storedSalt = user.PasswordHash?.Trim() ?? "";

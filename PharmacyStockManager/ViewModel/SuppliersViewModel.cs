@@ -2,12 +2,7 @@
 using PharmacyStockManager.Models;
 using PharmacyStockManager.Views;
 using PharmacyStockManager.Views.PopupWindows;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -60,7 +55,7 @@ namespace PharmacyStockManager.ViewModel
             Suppliers.Clear();
             Suppliers = new ObservableCollection<Supplier>(_context.Suppliers.AsNoTracking()
                 .Where(s => string.IsNullOrEmpty(filter) || s.SupplierName.Contains(filter))
-                .OrderBy(s=>s.SupplierName)
+                .OrderBy(s => s.SupplierName)
                 .ToList());
         }
 
@@ -76,7 +71,7 @@ namespace PharmacyStockManager.ViewModel
             {
                 if (dialog.DialogResult == true)
                     LoadSuppliers(SearchText);
-            main.RootLayout.Children.Remove(dialog);
+                main.RootLayout.Children.Remove(dialog);
             };
 
             dialog.Show();

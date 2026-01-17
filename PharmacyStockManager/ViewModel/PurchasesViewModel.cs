@@ -2,9 +2,7 @@
 using PharmacyStockManager.Models;
 using PharmacyStockManager.Views;
 using PharmacyStockManager.Views.PopupWindows;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -104,7 +102,9 @@ namespace PharmacyStockManager.ViewModel
             purchaseDialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
 
             mainWindow?.RootLayout.Children.Add(purchaseDialog);
-            purchaseDialog.Closed += delegate { LoadPurchases(SearchText);
+            purchaseDialog.Closed += delegate
+            {
+                LoadPurchases(SearchText);
                 mainWindow.RootLayout.Children.Remove(purchaseDialog);
             };
             purchaseDialog.Show();
@@ -119,7 +119,9 @@ namespace PharmacyStockManager.ViewModel
             purchaseDialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
 
             mainWindow?.RootLayout.Children.Add(purchaseDialog);
-            purchaseDialog.Closed += delegate { LoadPurchases(SearchText);
+            purchaseDialog.Closed += delegate
+            {
+                LoadPurchases(SearchText);
                 mainWindow.RootLayout.Children.Remove(purchaseDialog);
             };
             purchaseDialog.Show();

@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace PharmacyStockManager.Models;
 
@@ -16,8 +14,6 @@ public partial class AppDbContext : DbContext
         : base(options)
     {
     }
-
-   
 
     public virtual DbSet<Category> Categories { get; set; }
 
@@ -33,9 +29,15 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<PurchaseDetail> PurchaseDetails { get; set; }
 
+    public virtual DbSet<PurchasePayment> PurchasePayments { get; set; }
+
     public virtual DbSet<PurchaseReturnDetail> PurchaseReturnDetails { get; set; }
 
     public virtual DbSet<PurchaseReturnHeader> PurchaseReturnHeaders { get; set; }
+
+    public virtual DbSet<ReturnDetail> ReturnDetails { get; set; }
+
+    public virtual DbSet<ReturnProduct> ReturnProducts { get; set; }
 
     public virtual DbSet<Sale> Sales { get; set; }
 
@@ -54,18 +56,8 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<UserAccount> UserAccounts { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            var connStr = config.GetConnectionString("DefaultConnection");
-            optionsBuilder.UseNpgsql(connStr);
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Host=localhost;port=5432;Database=pharmacydb;Username=postgres;Password=1023203304");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -249,6 +241,33 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("PurchaseDetails_PurchaseID_fkey");
         });
 
+        modelBuilder.Entity<PurchasePayment>(entity =>
+        {
+            entity.HasKey(e => e.PaymentId).HasName("PurchasePayments_pkey");
+
+            entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
+            entity.Property(e => e.DueAmount).HasDefaultValueSql("0");
+            entity.Property(e => e.IsCredit).HasDefaultValue(false);
+            entity.Property(e => e.ModifiedAt).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.PaymentDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.PaymentMode).HasColumnType("character varying");
+            entity.Property(e => e.PurchaseId).HasColumnName("PurchaseID");
+
+            entity.HasOne(d => d.ModifiedByNavigation).WithMany(p => p.PurchasePaymentModifiedByNavigations)
+                .HasForeignKey(d => d.ModifiedBy)
+                .HasConstraintName("fk_purchasepayment_modifiedby_useraccount");
+
+            entity.HasOne(d => d.PaidByNavigation).WithMany(p => p.PurchasePaymentPaidByNavigations)
+                .HasForeignKey(d => d.PaidBy)
+                .HasConstraintName("fk_purchasepayment_paidby_useraccount");
+
+            entity.HasOne(d => d.Purchase).WithMany(p => p.PurchasePayments)
+                .HasForeignKey(d => d.PurchaseId)
+                .HasConstraintName("FK_PurchasePayments_Purchase");
+        });
+
         modelBuilder.Entity<PurchaseReturnDetail>(entity =>
         {
             entity.HasKey(e => e.PurchaseReturnDetailId).HasName("PurchaseReturnDetail_pkey");
@@ -316,6 +335,55 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.SupplierId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("PurchaseReturnHeader_SupplierID_fkey");
+        });
+
+        modelBuilder.Entity<ReturnDetail>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ReturnDetail_pkey");
+
+            entity.ToTable("ReturnDetail");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+            entity.Property(e => e.ModifiedAt).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.ReturnAmount).HasPrecision(18, 2);
+            entity.Property(e => e.ReturnDate).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.SaleId).HasColumnName("SaleID");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.ReturnDetails)
+                .HasForeignKey(d => d.CustomerId)
+                .HasConstraintName("fk_returndetail_customer");
+
+            entity.HasOne(d => d.Sale).WithMany(p => p.ReturnDetails)
+                .HasForeignKey(d => d.SaleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_returndetail_sale");
+        });
+
+        modelBuilder.Entity<ReturnProduct>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ReturnProduct_pkey");
+
+            entity.ToTable("ReturnProduct");
+
+            entity.Property(e => e.BatchNumber).HasMaxLength(100);
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.ReturnAmount).HasPrecision(18, 2);
+            entity.Property(e => e.ReturnDetailId).HasColumnName("ReturnDetailID");
+            entity.Property(e => e.SaleDetailId).HasColumnName("SaleDetailID");
+            entity.Property(e => e.SoldAmount).HasPrecision(18, 2);
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ReturnProducts)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_returnproduct_product");
+
+            entity.HasOne(d => d.ReturnDetail).WithMany(p => p.ReturnProducts)
+                .HasForeignKey(d => d.ReturnDetailId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_returnproduct_returndetail");
         });
 
         modelBuilder.Entity<Sale>(entity =>
