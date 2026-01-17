@@ -14,10 +14,10 @@ namespace PharmacyStockManager.Views.PopupWindows
 
         }
 
-        public SalesReturnDialog(int SaleId)
+        public SalesReturnDialog(int SaleID)
         {
             InitializeComponent();
-            SaleReturnViewModel viewModel = new SaleReturnViewModel(SaleId);
+            SaleReturnViewModel viewModel = new SaleReturnViewModel(SaleID);
             this.DataContext = viewModel;
             viewModel.CloseWindow += () => this.Close();
 

@@ -214,13 +214,13 @@ namespace PharmacyStockManager.ViewModel
                     product.SellingPrice = SellingPrice;
                     product.BatchNumber = BatchNumber;
                     product.ExpiryDate = DateOnly.FromDateTime(ExpiryDate);
-                    product.CategoryId = SelectedCategory.CategoryId;
-                    product.SupplierId = SelectedSupplier.SupplierId;
+                    product.CategoryID = SelectedCategory.CategoryID;
+                    product.SupplierID = SelectedSupplier.SupplierID;
                     product.CreatedAt = DateTime.Now;
                     product.QuantityInStock = QuantityInStock;
                     product.ReorderLevel = ReorderLevel;
                     product.ModifiedAt = DateTime.Now;
-                    product.ModifiedBy = App.LoggedInUser.UserId;
+                    product.ModifiedBy = App.LoggedInUser.UserID;
                 }
                 else
                 {
@@ -230,8 +230,8 @@ namespace PharmacyStockManager.ViewModel
                     product.SellingPrice = SellingPrice;
                     product.BatchNumber = BatchNumber;
                     product.ExpiryDate = DateOnly.FromDateTime(ExpiryDate);
-                    product.CategoryId = SelectedCategory.CategoryId;
-                    product.SupplierId = SelectedSupplier.SupplierId;
+                    product.CategoryID = SelectedCategory.CategoryID;
+                    product.SupplierID = SelectedSupplier.SupplierID;
                     product.CreatedAt = DateTime.Now;
                     product.QuantityInStock = QuantityInStock;
                     product.ReorderLevel = ReorderLevel;
@@ -249,9 +249,9 @@ namespace PharmacyStockManager.ViewModel
             SaveCommand = new RelayCommand(SaveProduct, obj => true);
             CancelCommand = new RelayCommand(obj => CloseWindow?.Invoke(), obj => true);
         }
-        public AddEditProductViewModel(int ProductId) : this()
+        public AddEditProductViewModel(int ProductID) : this()
         {
-            product = _context.Products.Find(ProductId);
+            product = _context.Products.Find(ProductID);
             if (product != null)
             {
                 ProductName = product.ProductName;
@@ -259,8 +259,8 @@ namespace PharmacyStockManager.ViewModel
                 SellingPrice = product.SellingPrice;
                 BatchNumber = product.BatchNumber;
                 ExpiryDate = product.ExpiryDate.HasValue ? product.ExpiryDate.Value.ToDateTime(new TimeOnly(0, 0)) : DateTime.Now;
-                SelectedCategory = Categories.FirstOrDefault(c => c.CategoryId == product.CategoryId);
-                SelectedSupplier = Suppliers.FirstOrDefault(s => s.SupplierId == product.SupplierId);
+                SelectedCategory = Categories.FirstOrDefault(c => c.CategoryID == product.CategoryID);
+                SelectedSupplier = Suppliers.FirstOrDefault(s => s.SupplierID == product.SupplierID);
                 QuantityInStock = product.QuantityInStock;
                 ReorderLevel = product.ReorderLevel;
             }

@@ -97,9 +97,9 @@ namespace PharmacyStockManager.ViewModel
             CancelCommand = new RelayCommand((obj) => CloseWindow?.Invoke(), (obj) => true);
         }
 
-        public AddEditCategoryViewModel(int CategoryId) : this()
+        public AddEditCategoryViewModel(int CategoryID) : this()
         {
-            Category = _context.Categories.Find(CategoryId);
+            Category = _context.Categories.Find(CategoryID);
         }
 
         private void ExecuteSave(object obj)
@@ -119,7 +119,7 @@ namespace PharmacyStockManager.ViewModel
             else
             {
                 // Update existing category
-                var existingCategory = _context.Categories.Find(Category.CategoryId);
+                var existingCategory = _context.Categories.Find(Category.CategoryID);
                 if (existingCategory != null)
                 {
                     existingCategory.CategoryName = this.CategoryName;

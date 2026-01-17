@@ -67,7 +67,7 @@
                     <ComboBox ItemsSource="{Binding Users}"
                               SelectedItem="{Binding SelectedPaidBy, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
                               DisplayMemberPath="Username"
-                              SelectedValuePath="UserId"
+                              SelectedValuePath="UserID"
                               Height="30"
                               Style="{StaticResource ValidationCombobox}"/>
                 </StackPanel>

@@ -5,11 +5,11 @@ namespace PharmacyStockManager.Models;
 
 public partial class PurchaseReturnHeader
 {
-    public int PurchaseReturnId { get; set; }
+    public int PurchaseReturnID { get; set; }
 
-    public int? PurchaseId { get; set; }
+    public int? PurchaseID { get; set; }
 
-    public int? SupplierId { get; set; }
+    public int? SupplierID { get; set; }
 
     public DateTime? ReturnDate { get; set; }
 

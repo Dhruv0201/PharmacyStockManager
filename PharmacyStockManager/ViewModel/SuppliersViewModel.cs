@@ -84,7 +84,7 @@ namespace PharmacyStockManager.ViewModel
             if (supplier == null) return;
             MainWindow main = Application.Current.MainWindow as MainWindow;
 
-            SupplierDialog dialog = new SupplierDialog(supplier.SupplierId);
+            SupplierDialog dialog = new SupplierDialog(supplier.SupplierID);
             dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
             main.RootLayout.Children.Add(dialog);
 

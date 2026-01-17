@@ -27,10 +27,10 @@ namespace PharmacyStockManager.Views.PopupWindows
             InitializeComponent();
         }
 
-        public PurchaseReturnDialog(int PurchaseId)
+        public PurchaseReturnDialog(int PurchaseID)
         {
             InitializeComponent();
-            PurchaseReturnViewModel viewModel = new PurchaseReturnViewModel(PurchaseId);
+            PurchaseReturnViewModel viewModel = new PurchaseReturnViewModel(PurchaseID);
             this.DataContext = viewModel;
 
         }

@@ -18,10 +18,10 @@ namespace PharmacyStockManager.Views.PopupWindows
             };
         }
 
-        public ProductDialog(int ProductId)
+        public ProductDialog(int ProductID)
         {
             InitializeComponent();
-            AddEditProductViewModel viewModel = new AddEditProductViewModel(ProductId);
+            AddEditProductViewModel viewModel = new AddEditProductViewModel(ProductID);
             this.DataContext = viewModel;
             viewModel.CloseWindow += () =>
             {

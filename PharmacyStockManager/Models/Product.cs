@@ -5,13 +5,13 @@ namespace PharmacyStockManager.Models;
 
 public partial class Product
 {
-    public int ProductId { get; set; }
+    public int ProductID { get; set; }
 
     public string ProductName { get; set; } = null!;
 
-    public int? CategoryId { get; set; }
+    public int? CategoryID { get; set; }
 
-    public int? SupplierId { get; set; }
+    public int? SupplierID { get; set; }
 
     public string? BatchNumber { get; set; }
 

@@ -36,7 +36,7 @@ namespace PharmacyStockManager.ViewModel
             set
             {
                 _supplier = value;
-                Purchase.SupplierId = value?.SupplierId;
+                Purchase.SupplierID = value?.SupplierID;
                 OnPropertyChanged(nameof(Supplier));
             }
         }
@@ -298,16 +298,16 @@ namespace PharmacyStockManager.ViewModel
 
         }
 
-        public AddEditPurchaseViewModel(int PurchaseId) : this()
+        public AddEditPurchaseViewModel(int PurchaseID) : this()
         {
             var purchase = _context.Purchases
-                .Where(x => x.PurchaseId == PurchaseId).Include(x => x.PurchaseDetails).Include(x=>x.PurchasePayments).ThenInclude(x=>x.PaidByNavigation)
+                .Where(x => x.PurchaseID == PurchaseID).Include(x => x.PurchaseDetails).Include(x=>x.PurchasePayments).ThenInclude(x=>x.PaidByNavigation)
                 .FirstOrDefault();
 
             if (purchase != null)
             {
                 Purchase = purchase;
-                Supplier = Suppliers.FirstOrDefault(x => x.SupplierId == Purchase.SupplierId);
+                Supplier = Suppliers.FirstOrDefault(x => x.SupplierID == Purchase.SupplierID);
                 PurchaseDate = Purchase.PurchaseDate;
 
                 PurchaseDetails = new ObservableCollection<PurchaseDetail>(
@@ -385,7 +385,7 @@ namespace PharmacyStockManager.ViewModel
                 PurchaseDetails.Add(new PurchaseDetail
                 {
                     Product = Product,
-                    ProductId = Product.ProductId,
+                    ProductID = Product.ProductID,
                     BatchNumber = BatchNumber,
                     Quantity = Quantity,
                     UnitPrice = UnitPrice,
@@ -399,9 +399,9 @@ namespace PharmacyStockManager.ViewModel
                 {
                     PurchaseDetails[index] = new PurchaseDetail
                     {
-                        PurchaseDetailId = _editingDetail.PurchaseDetailId,
+                        PurchaseDetailID = _editingDetail.PurchaseDetailID,
                         Product = Product,
-                        ProductId = Product.ProductId,
+                        ProductID = Product.ProductID,
                         BatchNumber = BatchNumber,
                         Quantity = Quantity,
                         UnitPrice = UnitPrice,
@@ -485,9 +485,9 @@ namespace PharmacyStockManager.ViewModel
 
 
             Purchase.ModifiedAt = DateTime.Now;
-            Purchase.ModifiedBy = App.LoggedInUser.UserId;
+            Purchase.ModifiedBy = App.LoggedInUser.UserID;
 
-            if (Purchase.PurchaseId == 0)
+            if (Purchase.PurchaseID == 0)
                 _context.Purchases.Add(Purchase);
             else
                 _context.Purchases.Update(Purchase);

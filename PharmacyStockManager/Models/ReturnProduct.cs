@@ -7,11 +7,11 @@ public partial class ReturnProduct
 {
     public int Id { get; set; }
 
-    public int ReturnDetailId { get; set; }
+    public int ReturnDetailID { get; set; }
 
-    public int SaleDetailId { get; set; }
+    public int SaleDetailID { get; set; }
 
-    public int ProductId { get; set; }
+    public int ProductID { get; set; }
 
     public string? BatchNumber { get; set; }
 
@@ -23,7 +23,11 @@ public partial class ReturnProduct
 
     public decimal ReturnAmount { get; set; }
 
+    public int? PurchaseDetailID { get; set; }
+
     public virtual Product Product { get; set; } = null!;
+
+    public virtual PurchaseDetail? PurchaseDetail { get; set; }
 
     public virtual ReturnDetail ReturnDetail { get; set; } = null!;
 }

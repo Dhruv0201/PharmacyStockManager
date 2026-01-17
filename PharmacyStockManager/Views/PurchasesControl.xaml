@@ -99,6 +99,15 @@
                                     Background="Transparent" BorderBrush="Transparent">
                                     <Image Source="pack://application:,,,/PharmacyStockManager;component/Resources/Icons/delete_icon.png"/>
                                 </Button>
+                                <Button Background="Transparent" BorderBrush="Transparent"
+  Command="{Binding DataContext.PurchaseReturnCommand,
+                    RelativeSource={RelativeSource AncestorType=DataGrid}}"
+  CommandParameter="{Binding}">
+                                    <TextBlock Text="Return"
+         Foreground="Blue"
+         TextDecorations="Underline"
+         Cursor="Hand"/>
+                                </Button>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

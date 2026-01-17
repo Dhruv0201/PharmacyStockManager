@@ -34,7 +34,7 @@
                     <TextBlock Text="Category:" FontWeight="SemiBold"/>
                     <ComboBox x:Name="cbCategory" ItemsSource="{Binding Categories}" Style="{StaticResource ValidationCombobox}" SelectedItem="{Binding SelectedCategory,UpdateSourceTrigger=LostFocus,ValidatesOnDataErrors=True}"
                               DisplayMemberPath="CategoryName"
-                              SelectedValuePath="CategoryId"
+                              SelectedValuePath="CategoryID"
                               Height="30"
                               SelectedIndex="0"
                               />
@@ -44,7 +44,7 @@
                     <TextBlock Text="Supplier:" FontWeight="SemiBold"/>
                     <ComboBox x:Name="cbSupplier" ItemsSource="{Binding Suppliers}" Style="{StaticResource ValidationCombobox}" SelectedItem="{Binding SelectedSupplier,UpdateSourceTrigger=LostFocus,ValidatesOnDataErrors=True}"
                               DisplayMemberPath="SupplierName"
-                              SelectedValuePath="SupplierId"
+                              SelectedValuePath="SupplierID"
                               Height="30"
                               SelectedIndex="0"
                               />

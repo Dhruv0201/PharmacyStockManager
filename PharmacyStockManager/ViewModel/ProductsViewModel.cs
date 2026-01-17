@@ -114,7 +114,7 @@ namespace PharmacyStockManager.ViewModel
             if (product == null) return;
 
             MainWindow main = Application.Current.MainWindow as MainWindow;
-            ProductDialog productDialog = new ProductDialog(product.ProductId);
+            ProductDialog productDialog = new ProductDialog(product.ProductID);
             productDialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
             main?.RootLayout.Children.Add(productDialog);
             productDialog.Closed += delegate

@@ -68,7 +68,7 @@ namespace PharmacyStockManager.ViewModel
                 query = query.Where(s =>
                     (s.Customer.Name ?? "").Contains(filter) ||
                     (s.SoldByNavigation.Username ?? "").Contains(filter) ||
-                    s.SaleId.ToString().Contains(filter)
+                    s.SaleID.ToString().Contains(filter)
                 );
             }
 
@@ -108,7 +108,7 @@ namespace PharmacyStockManager.ViewModel
             if (sale == null) return;
 
             MainWindow main = Application.Current.MainWindow as MainWindow;
-            SaleDialog dlg = new SaleDialog(sale.SaleId);
+            SaleDialog dlg = new SaleDialog(sale.SaleID);
             dlg.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
 
             main?.RootLayout.Children.Add(dlg);
@@ -125,7 +125,7 @@ namespace PharmacyStockManager.ViewModel
         private void ViewSale(Sale sale)
         {
 
-            var dialog = new SalesReturnDialog(sale.SaleId);
+            var dialog = new SalesReturnDialog(sale.SaleID);
 
             MainWindow main = Application.Current.MainWindow as MainWindow;
             dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];

@@ -5,11 +5,11 @@ namespace PharmacyStockManager.Models;
 
 public partial class SaleReturnDetail
 {
-    public int SaleReturnDetailId { get; set; }
+    public int SaleReturnDetailID { get; set; }
 
-    public int? SaleReturnId { get; set; }
+    public int? SaleReturnID { get; set; }
 
-    public int? ProductId { get; set; }
+    public int? ProductID { get; set; }
 
     public string? BatchNumber { get; set; }
 

@@ -91,9 +91,9 @@ namespace PharmacyStockManager.ViewModel
             CancelCommand = new RelayCommand((obj) => CloseWindow?.Invoke(), (obj) => true);
         }
 
-        public AddEditCustomerViewModel(int CustomerId) : this()
+        public AddEditCustomerViewModel(int CustomerID) : this()
         {
-            Customer = _context.Customers.Find(CustomerId);
+            Customer = _context.Customers.Find(CustomerID);
         }
 
         private void ExecuteSave(object obj)
@@ -114,7 +114,7 @@ namespace PharmacyStockManager.ViewModel
             else
             {
                 // Update existing customer
-                var existingCustomer = _context.Customers.Find(Customer.CustomerId);
+                var existingCustomer = _context.Customers.Find(Customer.CustomerID);
                 if (existingCustomer != null)
                 {
                     existingCustomer.Name = this.CustomerName;

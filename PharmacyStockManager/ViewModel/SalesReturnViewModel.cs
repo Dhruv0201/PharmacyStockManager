@@ -123,9 +123,9 @@ namespace PharmacyStockManager.ViewModel
         public Action CloseWindow;
 
 
-        public SaleReturnViewModel(int SaleId) : this()
+        public SaleReturnViewModel(int SaleID) : this()
         {
-            sale = appDbContext.Sales.Include(s => s.SaleDetails).ThenInclude(sd => sd.Product).Include(s => s.Customer).FirstOrDefault(x => x.SaleId == SaleId);
+            sale = appDbContext.Sales.Include(s => s.SaleDetails).ThenInclude(sd => sd.Product).Include(s => s.Customer).FirstOrDefault(x => x.SaleID == SaleID);
             CustomerName = sale.Customer?.Name;
             SoldItems = new ObservableCollection<SaleDetail>(sale.SaleDetails);
 
@@ -165,10 +165,10 @@ namespace PharmacyStockManager.ViewModel
                 ReturnProduct returnProduct = new ReturnProduct
                 {
                     Product = SelectedProduct,
-                    ProductId = SelectedProduct.ProductId,
+                    ProductID = SelectedProduct.ProductID,
                     ReturnAmount = ReturnAmountForProduct,
                     ReturnQty = ReturnQty,
-                    SaleDetailId = selectedSaleDetail.SaleDetailId,
+                    SaleDetailID = selectedSaleDetail.SaleDetailID,
                     BatchNumber = BatchNumber,
                     SoldAmount = selectedSaleDetail.UnitPrice,
                     SoldQty = selectedSaleDetail.QuantitySold
@@ -233,13 +233,39 @@ namespace PharmacyStockManager.ViewModel
         {
             foreach (var returnProduct in ReturnItems)
             {
-                SaleDetail saleDetail = sale.SaleDetails.FirstOrDefault(x => x.ProductId == returnProduct.ProductId);
+                SaleDetail saleDetail = sale.SaleDetails.FirstOrDefault(x => x.ProductID == returnProduct.ProductID);
                 if (saleDetail != null)
                 {
                     saleDetail.QuantitySold = saleDetail.QuantitySold - returnProduct.ReturnQty;
                     saleDetail.TotalPrice = saleDetail.TotalPrice - returnProduct.ReturnAmount;
                     appDbContext.SaleDetails.Update(saleDetail);
                 }
+            }
+            SaleReturnHeader salereturnheader = new SaleReturnHeader
+            {
+                CustomerID = sale.CustomerID,
+                SaleID = sale.SaleID,
+                ReturnDate = ReturnDate,
+                TotalAmount = TotalReturnAmount,
+                ReturnedBy = App.LoggedInUser.UserID,
+                Reason = Reason
+            };
+            appDbContext.SaleReturnHeaders.Add(salereturnheader);
+            appDbContext.SaveChanges();
+            foreach (var item in ReturnItems)
+            {
+                SaleReturnDetail saleReturnDetail = new SaleReturnDetail
+                {
+                    SaleReturnID = salereturnheader.SaleReturnID,
+                    ProductID = item.ProductID,
+                    BatchNumber = item.BatchNumber,
+                    QuantityReturned = item.ReturnQty,
+                    UnitPrice = item.SoldAmount,
+                    TotalPrice = item.ReturnAmount,
+                    ModifiedBy = App.LoggedInUser.UserID,
+                    ModifiedAt = DateTime.Now
+                };
+                appDbContext.SaleReturnDetails.Add(saleReturnDetail);
             }
             appDbContext.SaveChanges();
             CloseWindow?.Invoke();

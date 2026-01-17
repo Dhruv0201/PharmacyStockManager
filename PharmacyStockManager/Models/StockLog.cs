@@ -5,9 +5,9 @@ namespace PharmacyStockManager.Models;
 
 public partial class StockLog
 {
-    public int StockLogId { get; set; }
+    public int StockLogID { get; set; }
 
-    public int? ProductId { get; set; }
+    public int? ProductID { get; set; }
 
     public string? BatchNumber { get; set; }
 

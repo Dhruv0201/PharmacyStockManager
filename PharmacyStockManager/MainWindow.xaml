@@ -33,9 +33,9 @@
             <Button Content="Categories" Name="btnCategories" Style="{StaticResource SideMenuButton}" Click="BtnCategories_Click"/>
             <Button Content="Products" Name="btnProducts" Style="{StaticResource SideMenuButton}" Click="BtnProducts_Click"/>
             <Button Content="Purchases" Name="btnPurchases" Style="{StaticResource SideMenuButton}" Click="BtnPurchases_Click"/>
-            <Button Content="Purchase Returns" Name="btnPurchaseReturns" Style="{StaticResource SideMenuButton}" Click="BtnPurchaseReturns_Click"/>
+            <Button Content="Purchase Returns" Name="btnPurchaseReturns" Style="{StaticResource SideMenuButton}" Visibility="Collapsed" Click="BtnPurchaseReturns_Click"/>
             <Button Content="Sales" Name="btnSales" Style="{StaticResource SideMenuButton}" Click="BtnSales_Click"/>
-            <Button Content="Sale Returns" Name="btnSaleReturns" Style="{StaticResource SideMenuButton}" Click="BtnSaleReturns_Click"/>
+            <Button Content="Sale Returns" Name="btnSaleReturns" Style="{StaticResource SideMenuButton}" Visibility="Collapsed" Click="BtnSaleReturns_Click"/>
             <Button Content="Suppliers" Name="btnSuppliers" Style="{StaticResource SideMenuButton}" Click="BtnSuppliers_Click"/>
             <Button Content="Customers" Name="btnCustomers" Style="{StaticResource SideMenuButton}" Click="BtnCustomers_Click"/>
             <Button Content="Stock Logs" Name="btnStockLogs" Style="{StaticResource SideMenuButton}" Click="BtnStockLogs_Click"/>

@@ -151,7 +151,7 @@ namespace PharmacyStockManager.ViewModel
 
             if (saleDetail != null)
             {
-                SelectedProduct = Products.FirstOrDefault(p => p.ProductId == saleDetail.ProductId);
+                SelectedProduct = Products.FirstOrDefault(p => p.ProductID == saleDetail.ProductID);
                 QuantitySold = saleDetail.QuantitySold;
                 UnitPrice = saleDetail.UnitPrice;
                 TotalPrice = saleDetail.TotalPrice ?? (saleDetail.UnitPrice * saleDetail.QuantitySold);
@@ -172,19 +172,19 @@ namespace PharmacyStockManager.ViewModel
 
             if (saleDetail != null)
             {
-                saleDetail.ProductId = SelectedProduct.ProductId;
+                saleDetail.ProductID = SelectedProduct.ProductID;
                 saleDetail.QuantitySold = QuantitySold;
                 saleDetail.UnitPrice = UnitPrice;
                 saleDetail.TotalPrice = TotalPrice;
                 saleDetail.ModifiedAt = DateTime.Now;
-                saleDetail.ModifiedBy = App.LoggedInUser.UserId;
+                saleDetail.ModifiedBy = App.LoggedInUser.UserID;
                 saleDetail.Product = SelectedProduct;
             }
             else
             {
                 saleDetail = new SaleDetail()
                 {
-                    ProductId = SelectedProduct.ProductId,
+                    ProductID = SelectedProduct.ProductID,
                     QuantitySold = QuantitySold,
                     UnitPrice = UnitPrice,
                     TotalPrice = TotalPrice,

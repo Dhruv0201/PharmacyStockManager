@@ -5,9 +5,9 @@ namespace PharmacyStockManager.Models;
 
 public partial class Purchase
 {
-    public int PurchaseId { get; set; }
+    public int PurchaseID { get; set; }
 
-    public int? SupplierId { get; set; }
+    public int? SupplierID { get; set; }
 
     public DateTime? PurchaseDate { get; set; }
 

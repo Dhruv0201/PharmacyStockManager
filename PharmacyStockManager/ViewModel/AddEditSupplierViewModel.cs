@@ -120,9 +120,9 @@ public class AddEditSupplierViewModel : ViewModelBase, IDataErrorInfo
         CancelCommand = new RelayCommand((obj) => CloseWindow?.Invoke(), (obj) => true);
     }
 
-    public AddEditSupplierViewModel(int SupplierId) : this()
+    public AddEditSupplierViewModel(int SupplierID) : this()
     {
-        Supplier = _context.Suppliers.Find(SupplierId);
+        Supplier = _context.Suppliers.Find(SupplierID);
     }
 
     private void ExecuteSave(object obj)
@@ -145,7 +145,7 @@ public class AddEditSupplierViewModel : ViewModelBase, IDataErrorInfo
         }
         else
         {
-            var existingSupplier = _context.Suppliers.Find(Supplier.SupplierId);
+            var existingSupplier = _context.Suppliers.Find(Supplier.SupplierID);
             if (existingSupplier != null)
             {
                 existingSupplier.SupplierName = this.SupplierName;

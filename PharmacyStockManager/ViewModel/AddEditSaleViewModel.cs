@@ -182,17 +182,17 @@ namespace PharmacyStockManager.ViewModel
             DeletePaymentCommand = new RelayCommand(DeletePayment);
         }
 
-        public AddEditSaleViewModel(int SaleId) : this()
+        public AddEditSaleViewModel(int SaleID) : this()
         {
             sale = _context.Sales
                 .Include(s => s.SaleDetails).ThenInclude(x=>x.Product)
                 .Include(s => s.SalePayments)
-                .FirstOrDefault(s => s.SaleId == SaleId);
+                .FirstOrDefault(s => s.SaleID == SaleID);
 
             if (sale != null)
             {
-                SelectedCustomer = Customers.FirstOrDefault(c => c.CustomerId == sale.CustomerId);
-                SelectedSoldBy = Users.FirstOrDefault(u => u.UserId == sale.SoldBy);
+                SelectedCustomer = Customers.FirstOrDefault(c => c.CustomerID == sale.CustomerID);
+                SelectedSoldBy = Users.FirstOrDefault(u => u.UserID == sale.SoldBy);
 
                 SaleDate = sale.SaleDate;
                 TotalAmount = sale.TotalAmount ?? 0;
@@ -363,12 +363,12 @@ namespace PharmacyStockManager.ViewModel
 
             if (sale != null)
             {
-                sale.CustomerId = SelectedCustomer.CustomerId;
+                sale.CustomerID = SelectedCustomer.CustomerID;
                 sale.SaleDate = SaleDate;
-                sale.SoldBy = SelectedSoldBy?.UserId;
+                sale.SoldBy = SelectedSoldBy?.UserID;
                 sale.TotalAmount = TotalAmount;
                 sale.ModifiedAt = DateTime.Now;
-                sale.ModifiedBy = App.LoggedInUser.UserId;
+                sale.ModifiedBy = App.LoggedInUser.UserID;
 
                 // Clear and add fresh clean entities
                 sale.SaleDetails.Clear();
@@ -376,13 +376,13 @@ namespace PharmacyStockManager.ViewModel
                 {
                     sale.SaleDetails.Add(new SaleDetail
                     {
-                        ProductId = d.ProductId,
+                        ProductID = d.ProductID,
                         BatchNumber = d.BatchNumber,
                         QuantitySold = d.QuantitySold,
                         UnitPrice = d.UnitPrice,
                         TotalPrice = d.TotalPrice,
                         ModifiedAt = DateTime.Now,
-                        ModifiedBy = App.LoggedInUser.UserId
+                        ModifiedBy = App.LoggedInUser.UserID
                     });
                 }
 
@@ -397,7 +397,7 @@ namespace PharmacyStockManager.ViewModel
                         DueAmount = p.DueAmount,
                         CollectedBy = p.CollectedBy,
                         ModifiedAt = DateTime.Now,
-                        ModifiedBy = App.LoggedInUser.UserId
+                        ModifiedBy = App.LoggedInUser.UserID
                     });
                 }
             }
@@ -405,9 +405,9 @@ namespace PharmacyStockManager.ViewModel
             {
                 sale = new Sale()
                 {
-                    CustomerId = SelectedCustomer.CustomerId,
+                    CustomerID = SelectedCustomer.CustomerID,
                     SaleDate = SaleDate,
-                    SoldBy = SelectedSoldBy?.UserId,
+                    SoldBy = SelectedSoldBy?.UserID,
                     TotalAmount = TotalAmount
                 };
 
@@ -417,13 +417,13 @@ namespace PharmacyStockManager.ViewModel
                 {
                     sale.SaleDetails.Add(new SaleDetail
                     {
-                        ProductId = d.ProductId,
+                        ProductID = d.ProductID,
                         BatchNumber = d.BatchNumber,
                         QuantitySold = d.QuantitySold,
                         UnitPrice = d.UnitPrice,
                         TotalPrice = d.TotalPrice,
                         ModifiedAt = DateTime.Now,
-                        ModifiedBy = App.LoggedInUser.UserId
+                        ModifiedBy = App.LoggedInUser.UserID
                     });
                 }
 
@@ -437,7 +437,7 @@ namespace PharmacyStockManager.ViewModel
                         DueAmount = p.DueAmount,
                         CollectedBy = p.CollectedBy,
                         ModifiedAt = DateTime.Now,
-                        ModifiedBy = App.LoggedInUser.UserId
+                        ModifiedBy = App.LoggedInUser.UserID
                     });
                 }
             }

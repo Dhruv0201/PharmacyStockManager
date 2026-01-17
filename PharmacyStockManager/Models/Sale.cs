@@ -5,9 +5,9 @@ namespace PharmacyStockManager.Models;
 
 public partial class Sale
 {
-    public int SaleId { get; set; }
+    public int SaleID { get; set; }
 
-    public int? CustomerId { get; set; }
+    public int? CustomerID { get; set; }
 
     public DateTime? SaleDate { get; set; }
 

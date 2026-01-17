@@ -22,10 +22,10 @@ namespace PharmacyStockManager.Views.PopupWindows
             this.Close();
         }
 
-        public SupplierDialog(int SupplierId)
+        public SupplierDialog(int SupplierID)
         {
             InitializeComponent();
-            viewModel = new AddEditSupplierViewModel(SupplierId);
+            viewModel = new AddEditSupplierViewModel(SupplierID);
             this.DataContext = viewModel;
             this.viewModel.CloseWindow += ViewModel_CloseWindow;
         }

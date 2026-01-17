@@ -81,7 +81,7 @@ namespace PharmacyStockManager.ViewModel
             if (category == null) return;
             MainWindow main = Application.Current.MainWindow as MainWindow;
 
-            CategoryDialog dialog = new CategoryDialog(category.CategoryId);
+            CategoryDialog dialog = new CategoryDialog(category.CategoryID);
             dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
 
             main.RootLayout.Children.Add(dialog);

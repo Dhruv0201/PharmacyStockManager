@@ -17,10 +17,10 @@ namespace PharmacyStockManager.Views.PopupWindows
             viewModel.CloseWindow += () => this.Close();
         }
 
-        public SaleDialog(int SaleId)
+        public SaleDialog(int SaleID)
         {
             InitializeComponent();
-            AddEditSaleViewModel viewModel = new AddEditSaleViewModel(SaleId);
+            AddEditSaleViewModel viewModel = new AddEditSaleViewModel(SaleID);
             this.DataContext = viewModel;
             viewModel.CloseWindow += () => this.Close();
         }

@@ -5,9 +5,9 @@ namespace PharmacyStockManager.Models;
 
 public partial class PriceHistory
 {
-    public int PriceHistoryId { get; set; }
+    public int PriceHistoryID { get; set; }
 
-    public int? ProductId { get; set; }
+    public int? ProductID { get; set; }
 
     public decimal? OldPurchasePrice { get; set; }
 

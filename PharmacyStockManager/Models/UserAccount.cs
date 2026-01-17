@@ -5,7 +5,7 @@ namespace PharmacyStockManager.Models;
 
 public partial class UserAccount
 {
-    public int UserId { get; set; }
+    public int UserID { get; set; }
 
     public string Username { get; set; } = null!;
 

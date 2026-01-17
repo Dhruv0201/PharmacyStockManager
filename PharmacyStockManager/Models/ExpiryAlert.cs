@@ -5,9 +5,9 @@ namespace PharmacyStockManager.Models;
 
 public partial class ExpiryAlert
 {
-    public int ExpiryAlertId { get; set; }
+    public int ExpiryAlertID { get; set; }
 
-    public int? ProductId { get; set; }
+    public int? ProductID { get; set; }
 
     public string? BatchNumber { get; set; }
 

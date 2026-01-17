@@ -34,7 +34,7 @@
                     <ComboBox ItemsSource="{Binding Products}"
                               SelectedItem="{Binding SelectedProduct, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"
                               DisplayMemberPath="ProductName"
-                              SelectedValuePath="ProductId"
+                              SelectedValuePath="ProductID"
                               Height="30"
                               Style="{StaticResource ValidationCombobox}"/>
                 </StackPanel>

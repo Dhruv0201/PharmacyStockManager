@@ -182,7 +182,7 @@ namespace PharmacyStockManager.ViewModel
                 AmountPaid = PurchasePayment.AmountPaid;
                 DueAmount = PurchasePayment.DueAmount;
 
-                //SelectedPaidBy = Users.FirstOrDefault(u => u.UserId == PurchasePayment.PaidBy);
+                //SelectedPaidBy = Users.FirstOrDefault(u => u.UserID == PurchasePayment.PaidBy);
             }
         }
 
@@ -210,11 +210,11 @@ namespace PharmacyStockManager.ViewModel
                 PurchasePayment.PaymentMode = PaymentMode;
                 PurchasePayment.AmountPaid = AmountPaid;
                 PurchasePayment.DueAmount = DueAmount;
-                PurchasePayment.PaidBy = SelectedPaidBy?.UserId;
+                PurchasePayment.PaidBy = SelectedPaidBy?.UserID;
                 PurchasePayment.PaidByNavigation = SelectedPaidBy;
 
                 PurchasePayment.ModifiedAt = DateTime.Now;
-                PurchasePayment.ModifiedBy = App.LoggedInUser.UserId;
+                PurchasePayment.ModifiedBy = App.LoggedInUser.UserID;
             }
             else
             {
@@ -224,7 +224,7 @@ namespace PharmacyStockManager.ViewModel
                     PaymentMode = PaymentMode,
                     AmountPaid = AmountPaid,
                     DueAmount = DueAmount,
-                    PaidBy = SelectedPaidBy?.UserId,
+                    PaidBy = SelectedPaidBy?.UserID,
                     PaidByNavigation = SelectedPaidBy
                 };
             }

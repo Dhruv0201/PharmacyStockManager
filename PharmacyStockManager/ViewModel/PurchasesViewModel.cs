@@ -51,6 +51,7 @@ namespace PharmacyStockManager.ViewModel
         public ICommand DeleteCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand ViewInvoiceCommand { get; }
+        public ICommand PurchaseReturnCommand { get; }
 
         public PurchasesViewModel()
         {
@@ -59,9 +60,22 @@ namespace PharmacyStockManager.ViewModel
             DeleteCommand = new RelayCommand(obj => DeletePurchase(obj as Purchase));
             RefreshCommand = new RelayCommand(_ => LoadPurchases());
             ViewInvoiceCommand = new RelayCommand(obj => ViewInvoice(obj as Purchase));
+            PurchaseReturnCommand = new RelayCommand(obj => PurchaseReturn(obj as Purchase));
 
             LoadSuppliers();
             LoadPurchases();
+        }
+
+        private void PurchaseReturn(Purchase? purchase)
+        {
+            var dialog = new PurchaseReturnDialog(purchase.PurchaseID);
+
+            MainWindow main = Application.Current.MainWindow as MainWindow;
+            dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
+
+            main?.RootLayout.Children.Add(dialog);
+            // attach childwindow style like before
+            dialog.Show();
         }
 
         private void LoadSuppliers()
@@ -115,7 +129,7 @@ namespace PharmacyStockManager.ViewModel
             if (purchase == null) return;
 
             MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-            PurchaseDialog purchaseDialog = new PurchaseDialog(purchase.PurchaseId);
+            PurchaseDialog purchaseDialog = new PurchaseDialog(purchase.PurchaseID);
             purchaseDialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
 
             mainWindow?.RootLayout.Children.Add(purchaseDialog);

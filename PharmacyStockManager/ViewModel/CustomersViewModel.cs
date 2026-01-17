@@ -82,7 +82,7 @@ namespace PharmacyStockManager.ViewModel
             if (customer == null) return;
             MainWindow main = Application.Current.MainWindow as MainWindow;
 
-            CustomerDialog dialog = new CustomerDialog(customer.CustomerId);
+            CustomerDialog dialog = new CustomerDialog(customer.CustomerID);
             dialog.Style = (Style)Application.Current.Resources["ChildWindowStyle"];
             main.RootLayout.Children.Add(dialog);
 
